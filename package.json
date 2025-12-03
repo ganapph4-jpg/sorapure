@@ -1,0 +1,33 @@
+{
+    "name": "sorapure",
+    "version": "2.0.0",
+    "description": "Download Sora2 videos without watermark",
+    "main": "server.js",
+    "scripts": {
+        "start": "node server.js",
+        "format": "prettier --write .",
+        "format:check": "prettier --check ."
+    },
+    "author": "Bakhtier Sizhaev <ai2key>",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/summerlinex/sorapure"
+    },
+    "keywords": [
+        "sora",
+        "sora2",
+        "openai",
+        "video",
+        "download",
+        "watermark"
+    ],
+    "dependencies": {
+        "axios": "^1.6.0",
+        "dotenv": "^17.2.3",
+        "express": "^4.18.2"
+    },
+    "devDependencies": {
+        "prettier": "^3.4.2"
+    }
+}
