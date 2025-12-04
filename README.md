@@ -1,8 +1,10 @@
 # SoraPure - Download Sora2 Videos Without Watermark
 
-Local service for downloading OpenAI Sora2 videos without watermark.
+Download OpenAI Sora2 videos without watermark.
 
-**Also available as Telegram Bot: [@sorapure_bot](https://t.me/sorapure_bot)**
+**Live:** [sorapure.vercel.app](https://sorapure.vercel.app)
+
+**Telegram Bot:** [@sorapure_bot](https://t.me/sorapure_bot)
 
 ![Before & After](preview.jpg)
 

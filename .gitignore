@@ -32,3 +32,5 @@ npm-debug.log*
 .playwright-mcp/
 tmp/
 temp/
+
+.vercel
