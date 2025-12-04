@@ -174,7 +174,8 @@ app.get('/', (_, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-app.post('/download', async (req, res) => {
+// Download handler for both /download and /api/download
+async function handleDownload(req, res) {
     const { url } = req.body;
     const token = req.body.token || config.bearerToken;
     const cookies = req.body.cookies || config.cookies;
@@ -245,6 +246,9 @@ app.post('/download', async (req, res) => {
         safeDelete(outputPath);
         res.status(500).json({ error: err.message || 'Download failed' });
     }
-});
+}
+
+app.post('/download', handleDownload);
+app.post('/api/download', handleDownload);
 
 app.listen(PORT, () => console.log(`SoraPure running on port ${PORT}`));
