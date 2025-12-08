@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru">
+<html lang="en">
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -284,7 +284,7 @@
 
             .input:focus {
                 border-color: var(--accent);
-                box-shadow: 0 0 0 3px var(--accent-glow);
+                box-shadow: 0 0 0 4px var(--accent-glow);
             }
 
             .input-icon {
@@ -307,24 +307,25 @@
             .btn {
                 width: 100%;
                 padding: 14px 24px;
-                background: linear-gradient(135deg, var(--accent), #0ea5e9);
+                background: var(--accent);
                 border: none;
                 border-radius: 12px;
                 color: var(--bg-primary);
                 font-size: 0.9375rem;
                 font-weight: 600;
                 cursor: pointer;
-                transition: all 0.2s ease;
+                transition: all 0.25s ease-in-out;
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 gap: 8px;
-                box-shadow: 0 4px 14px var(--accent-glow);
+                box-shadow: 0 4px 14px rgba(56, 189, 248, 0.2);
             }
 
             .btn:hover:not(:disabled) {
-                transform: translateY(-1px);
-                box-shadow: 0 6px 20px var(--accent-glow);
+                transform: translateY(-2px);
+                box-shadow: 0 8px 25px rgba(56, 189, 248, 0.3);
+                background: var(--accent-hover);
             }
 
             .btn:active:not(:disabled) {
@@ -332,7 +333,8 @@
             }
 
             .btn:disabled {
-                opacity: 0.6;
+                background: var(--accent);
+                opacity: 0.5;
                 cursor: not-allowed;
             }
 
@@ -355,76 +357,87 @@
                 align-items: center;
                 justify-content: center;
                 border: 1px solid var(--border);
+                transition: all 0.3s ease;
             }
 
             .status.success {
-                color: var(--success);
-                border-color: rgba(74, 222, 128, 0.2);
-                background: rgba(74, 222, 128, 0.05);
+                color: #fff;
+                border-color: rgba(74, 222, 128, 0.4);
+                background: rgba(74, 222, 128, 0.15);
             }
 
             .status.error {
-                color: var(--error);
-                border-color: rgba(248, 113, 113, 0.2);
-                background: rgba(248, 113, 113, 0.05);
+                color: #fff;
+                border-color: rgba(248, 113, 113, 0.4);
+                background: rgba(248, 113, 113, 0.15);
             }
-
+            
             /* Video Preview */
             .preview {
-                margin-top: 20px;
-                display: none;
+                margin-top: 24px;
+                opacity: 0;
+                max-height: 0;
+                overflow: hidden;
+                transition: opacity 0.4s ease, max-height 0.4s ease;
             }
 
             .preview.visible {
-                display: block;
+                opacity: 1;
+                max-height: 500px;
             }
 
             .video-wrapper {
                 position: relative;
-                border-radius: 12px;
+                border-radius: 16px;
                 overflow: hidden;
-                background: var(--bg-secondary);
+                background: #000;
                 border: 1px solid var(--border);
+                box-shadow: 0 8px 30px rgba(0,0,0,0.3);
             }
 
             .video-wrapper video {
                 width: 100%;
-                max-height: 240px;
+                max-height: 260px;
                 object-fit: contain;
                 display: block;
-                background: #000;
             }
 
             /* Download Button */
             .download-btn {
-                display: none;
-                margin-top: 12px;
+                display: flex;
+                margin-top: 16px;
                 padding: 12px 20px;
-                background: var(--bg-secondary);
-                border: 1px solid var(--success);
-                border-radius: 10px;
-                color: var(--success);
+                background: var(--success);
+                border: none;
+                border-radius: 12px;
+                color: var(--bg-primary);
                 font-size: 0.875rem;
-                font-weight: 500;
+                font-weight: 600;
                 text-decoration: none;
                 text-align: center;
-                transition: all 0.2s ease;
-            }
-
-            .download-btn.visible {
-                display: flex;
+                transition: all 0.25s ease-in-out;
                 align-items: center;
                 justify-content: center;
                 gap: 8px;
+                opacity: 0;
+                transform: translateY(10px);
+                pointer-events: none;
+            }
+
+            .download-btn.visible {
+                opacity: 1;
+                transform: translateY(0);
+                pointer-events: auto;
             }
 
             .download-btn:hover {
-                background: rgba(74, 222, 128, 0.1);
+                background: #6af59f;
+                transform: scale(1.03);
             }
 
             .download-btn svg {
-                width: 16px;
-                height: 16px;
+                width: 18px;
+                height: 18px;
             }
 
             /* Footer */
@@ -639,8 +652,8 @@
                 <!-- Language Switcher -->
                 <div class="lang-switcher">
                     <select class="lang-select" id="langSelect">
-                        <option value="ru">Русский</option>
                         <option value="en">English</option>
+                        <option value="ru">Русский</option>
                         <option value="zh">中文</option>
                         <option value="es">Español</option>
                     </select>
@@ -660,13 +673,13 @@
                         </div>
                         <span class="logo-text">SoraPure</span>
                     </div>
-                    <p class="tagline" data-i18n="tagline">Скачивайте видео Sora2 без водяного знака</p>
-                    <div class="year-badge" data-i18n="newyear">С наступающим 2026 годом!</div>
+                    <p class="tagline" data-i18n="tagline">Download Sora2 videos without watermark</p>
+                    <div class="year-badge" data-i18n="newyear">Happy New Year 2026!</div>
                 </div>
 
                 <!-- Form -->
                 <div class="form-group">
-                    <label class="label" data-i18n="label">URL или код видео</label>
+                    <label class="label" data-i18n="label">Video URL or Code</label>
                     <div class="input-wrapper">
                         <svg class="input-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path
@@ -680,12 +693,12 @@
                             id="url"
                             class="input"
                             data-i18n-placeholder="placeholder"
-                            placeholder="sora.chatgpt.com/p/s_xxx или s_xxx"
+                            placeholder="sora.chatgpt.com/p/s_xxx or s_xxx"
                             autocomplete="off"
                             spellcheck="false"
                         />
                     </div>
-                    <p class="hint" data-i18n="hint">Вставьте URL видео Sora2 или код видео (s_xxxxx)</p>
+                    <p class="hint" data-i18n="hint">Paste Sora2 video URL or video code (s_xxxxx)</p>
                 </div>
 
                 <button id="go" class="btn">
@@ -696,37 +709,33 @@
                             d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
                         />
                     </svg>
-                    <span data-i18n="download">Скачать HD</span>
+                    <span data-i18n="download">Download HD</span>
                 </button>
 
                 <!-- Status -->
-                <div id="log" class="status" data-i18n="ready">Готов к скачиванию</div>
+                <div id="log" class="status" data-i18n="ready">Ready to download</div>
 
                 <!-- Preview -->
                 <div id="preview" class="preview">
                     <div class="video-wrapper">
-                        <video id="player" controls></video>
+                        <video id="player" controls playsinline muted loop></video>
                     </div>
                     <a id="downloadLink" class="download-btn" download>
                         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                            />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                         </svg>
-                        <span data-i18n="save">Сохранить на устройство</span>
+                        <span data-i18n="save">Save to device</span>
                     </a>
                 </div>
 
                 <!-- Footer -->
                 <div class="footer">
-                    <p class="footer-text" data-i18n="footer">Скачивание без водяного знака</p>
+                    <p class="footer-text" data-i18n="footer">Watermark-free download</p>
 
                     <div class="footer-credits">
                         <p class="footer-dev">
-                            <span data-i18n="developed_by">Разработал</span>
-                            <a href="https://t.me/bakhtier_sizhaev" target="_blank" rel="noopener">Бахтиер Сижаев</a>
+                            <span data-i18n="developed_by">Developed by</span>
+                            <a href="https://t.me/bakhtier_sizhaev" target="_blank" rel="noopener">Bakhtier Sizhaev</a>
                             <span style="opacity: 0.5">(AI2KEY)</span>
                         </p>
 
@@ -737,7 +746,7 @@
                                         d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"
                                     />
                                 </svg>
-                                <span data-i18n="channel">Канал</span>
+                                <span data-i18n="channel">Channel</span>
                             </a>
                             <a
                                 href="https://t.me/sorapure_bot"
@@ -750,11 +759,11 @@
                                         d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
                                     />
                                 </svg>
-                                <span data-i18n="bot">Бот</span>
+                                <span data-i18n="bot">Bot</span>
                             </a>
                         </div>
 
-                        <p class="footer-date">Декабрь 2025</p>
+                        <p class="footer-date">December 2025</p>
                     </div>
                 </div>
             </div>
@@ -845,7 +854,8 @@
                 },
             };
 
-            let currentLang = localStorage.getItem('sora_lang') || 'ru';
+            // MODIFIED: Default language is now 'en'
+            let currentLang = localStorage.getItem('sora_lang') || 'en';
 
             function t(key) {
                 return i18n[currentLang]?.[key] || i18n.en[key] || key;
@@ -855,33 +865,27 @@
                 currentLang = lang;
                 localStorage.setItem('sora_lang', lang);
 
-                // Update all elements with data-i18n
                 document.querySelectorAll('[data-i18n]').forEach((el) => {
                     const key = el.getAttribute('data-i18n');
                     el.textContent = t(key);
                 });
 
-                // Update placeholders
                 document.querySelectorAll('[data-i18n-placeholder]').forEach((el) => {
                     const key = el.getAttribute('data-i18n-placeholder');
                     el.placeholder = t(key);
                 });
 
-                // Update select value
                 const langSelect = document.getElementById('langSelect');
                 if (langSelect) langSelect.value = lang;
 
-                // Update HTML lang attribute
                 document.documentElement.lang = lang;
             }
 
-            // Language switcher
             const langSelect = document.getElementById('langSelect');
             langSelect.addEventListener('change', (e) => {
                 updateLanguage(e.target.value);
             });
 
-            // Initialize language
             updateLanguage(currentLang);
 
             // Snowflakes
