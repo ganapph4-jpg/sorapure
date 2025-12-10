@@ -1,649 +1,784 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <!-- MODIFIED: New Title -->
-        <title>Video Grabber</title>
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-        <link rel="apple-touch-icon" href="/favicon.svg" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <!-- MODIFIED: New Fonts -->
-        <link
-            href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Roboto+Mono&display=swap"
-            rel="stylesheet"
-        />
-        <style>
-            /* --- MODIFIED: NEW COLOR SCHEME --- */
-            :root {
-                --bg-primary: #1a1a2e; /* Dark Purple */
-                --bg-secondary: #16213e; /* Darker Blue/Purple */
-                --bg-card: #2c2c54; /* Muted Purple */
-                --accent: #00ffab; /* Vibrant Green */
-                --accent-hover: #00e096;
-                --accent-glow: rgba(0, 255, 171, 0.2);
-                --text-primary: #f0f0f0; /* Soft White */
-                --text-secondary: #a8a8d1; /* Light Purple/Gray */
-                --text-muted: #8080ac;
-                --border: rgba(168, 168, 209, 0.2);
-                --success: #00ffab;
-                --error: #f45b69;
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sora Downloader | Watermark-Free Video Enhancement</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #f1f5f9;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            margin-bottom: 40px;
+            border-bottom: 1px solid #334155;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo-icon {
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        
+        .logo-text {
+            font-family: 'Poppins', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(to right, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .tagline {
+            font-size: 14px;
+            color: #94a3b8;
+            margin-top: -5px;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+        
+        nav a {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            transition: color 0.3s;
+            padding: 5px 0;
+        }
+        
+        nav a:hover, nav a.active {
+            color: #60a5fa;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+        
+        .download-section {
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 16px;
+            padding: 35px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            border: 1px solid #475569;
+        }
+        
+        .section-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            color: #f8fafc;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-title i {
+            color: #60a5fa;
+        }
+        
+        .url-input-container {
+            position: relative;
+            margin-bottom: 25px;
+        }
+        
+        .url-input {
+            width: 100%;
+            padding: 16px 20px 16px 50px;
+            background: #1e293b;
+            border: 2px solid #475569;
+            border-radius: 12px;
+            color: #f1f5f9;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .url-input:focus {
+            outline: none;
+            border-color: #60a5fa;
+            box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
+        }
+        
+        .url-icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+        }
+        
+        .enhance-options {
+            margin-bottom: 30px;
+        }
+        
+        .option-group {
+            margin-bottom: 20px;
+        }
+        
+        .option-title {
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .option-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .option-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            background: #1e293b;
+            border-radius: 10px;
+            border: 1px solid #475569;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .option-item:hover {
+            border-color: #60a5fa;
+            background: rgba(96, 165, 250, 0.05);
+        }
+        
+        .option-item.active {
+            border-color: #60a5fa;
+            background: rgba(96, 165, 250, 0.1);
+        }
+        
+        .option-checkbox {
+            width: 20px;
+            height: 20px;
+            border-radius: 5px;
+            border: 2px solid #64748b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        
+        .option-item.active .option-checkbox {
+            background: #3b82f6;
+            border-color: #3b82f6;
+        }
+        
+        .option-item.active .option-checkbox i {
+            font-size: 12px;
+            color: white;
+        }
+        
+        .quality-slider {
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        
+        .slider-value {
+            color: #60a5fa;
+            font-weight: 600;
+        }
+        
+        .slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #334155;
+            outline: none;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #3b82f6;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        }
+        
+        .download-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 10px;
+        }
+        
+        .download-btn:hover {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+        }
+        
+        .download-btn:active {
+            transform: translateY(0);
+        }
+        
+        .preview-section {
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 16px;
+            padding: 35px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            border: 1px solid #475569;
+        }
+        
+        .video-preview {
+            background: #1e293b;
+            border-radius: 12px;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+            border: 2px dashed #475569;
+            overflow: hidden;
+        }
+        
+        .preview-placeholder {
+            text-align: center;
+            color: #94a3b8;
+        }
+        
+        .preview-placeholder i {
+            font-size: 60px;
+            margin-bottom: 15px;
+            color: #475569;
+        }
+        
+        .video-info {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 20px;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #334155;
+        }
+        
+        .info-row:last-child {
+            border-bottom: none;
+        }
+        
+        .info-label {
+            color: #94a3b8;
+        }
+        
+        .info-value {
+            color: #e2e8f0;
+            font-weight: 500;
+        }
+        
+        .features-section {
+            margin-bottom: 60px;
+        }
+        
+        .features-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 50px;
+            color: #f8fafc;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        
+        .feature-card {
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            border: 1px solid #475569;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            border-color: #60a5fa;
+        }
+        
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 30px;
+        }
+        
+        .feature-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #f8fafc;
+        }
+        
+        .feature-desc {
+            color: #cbd5e1;
+            font-size: 15px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            border-top: 1px solid #334155;
+            color: #94a3b8;
+            font-size: 14px;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-top: 15px;
+        }
+        
+        .footer-links a {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: #60a5fa;
+        }
+        
+        .watermark-badge {
+            display: inline-block;
+            background: rgba(239, 68, 68, 0.1);
+            color: #f87171;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        
+        @media (max-width: 992px) {
+            .main-content {
+                grid-template-columns: 1fr;
             }
-
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
+            
+            .option-grid {
+                grid-template-columns: 1fr;
             }
-
-            html {
-                font-size: 16px;
-            }
-
-            body {
-                /* MODIFIED: New Font Family */
-                font-family:
-                    'Poppins',
-                    -apple-system,
-                    BlinkMacSystemFont,
-                    sans-serif;
-                background: var(--bg-primary);
-                color: var(--text-primary);
-                min-height: 100vh;
-                overflow-x: hidden;
-                position: relative;
-            }
-
-            /* --- MODIFIED: New Background Pattern --- */
-            .bg-pattern {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                pointer-events: none;
-                z-index: 0;
-                background-image:
-                    radial-gradient(var(--text-muted) 0.5px, transparent 0.5px),
-                    radial-gradient(var(--text-muted) 0.5px, var(--bg-primary) 0.5px);
-                background-size: 20px 20px;
-                background-position: 0 0, 10px 10px;
-                opacity: 0.1;
-            }
-
-            /* Main Container */
-            .container {
-                position: relative;
-                z-index: 1;
-                max-width: 520px;
-                margin: 0 auto;
-                padding: 24px 16px;
-                min-height: 100vh;
-                display: flex;
+        }
+        
+        @media (max-width: 768px) {
+            header {
                 flex-direction: column;
-                justify-content: center;
-            }
-
-            /* --- MODIFIED: Card Style --- */
-            .card {
-                background: var(--bg-card);
-                border: 1px solid var(--border);
-                border-radius: 24px;
-                padding: 32px 24px;
-                box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-            }
-
-            /* Language Switcher */
-            .lang-switcher {
-                position: absolute;
-                top: 16px;
-                right: 16px;
-                z-index: 10;
-            }
-
-            .lang-select {
-                appearance: none;
-                -webkit-appearance: none;
-                background: var(--bg-secondary);
-                border: 1px solid var(--border);
-                border-radius: 8px;
-                padding: 8px 32px 8px 12px;
-                color: var(--text-primary);
-                font-size: 0.8125rem;
-                font-family: inherit;
-                cursor: pointer;
-                outline: none;
-                transition: all 0.2s ease;
-                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a8a8d1' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-                background-repeat: no-repeat;
-                background-position: right 10px center;
-            }
-
-            .lang-select:hover {
-                border-color: var(--accent);
-            }
-
-            .lang-select:focus {
-                border-color: var(--accent);
-                box-shadow: 0 0 0 3px var(--accent-glow);
+                gap: 20px;
+                text-align: center;
             }
             
-            /* Logo & Header */
-            .header {
-                text-align: center;
-                margin-bottom: 32px;
-            }
-
-            .logo {
-                display: inline-flex;
-                align-items: center;
-                gap: 12px;
-                margin-bottom: 8px;
-            }
-
-            /* MODIFIED: Logo Icon Style */
-            .logo-icon {
-                width: 48px;
-                height: 48px;
-                background: var(--accent);
-                border-radius: 14px;
-                display: flex;
-                align-items: center;
+            nav ul {
+                flex-wrap: wrap;
                 justify-content: center;
-                box-shadow: 0 0 24px var(--accent-glow);
-            }
-
-            .logo-icon svg {
-                width: 28px;
-                height: 28px;
-                color: var(--bg-primary); /* Icon color to contrast with green */
-            }
-
-            /* MODIFIED: Logo Text Style */
-            .logo-text {
-                font-size: 2.25rem; /* Larger title */
-                font-weight: 700;
-                color: var(--text-primary);
-            }
-
-            .tagline {
-                font-size: 1rem;
-                color: var(--text-secondary);
-                font-weight: 400;
-            }
-
-            /* Form */
-            .form-group {
-                margin-bottom: 20px;
-            }
-
-            .label {
-                display: block;
-                font-size: 0.875rem;
-                font-weight: 500;
-                color: var(--text-secondary);
-                margin-bottom: 8px;
-            }
-
-            .input-wrapper {
-                position: relative;
-            }
-
-            /* MODIFIED: Input Style */
-            .input {
-                width: 100%;
-                padding: 14px 16px;
-                padding-left: 44px;
-                background: var(--bg-secondary);
-                border: 1px solid var(--border);
-                border-radius: 12px;
-                color: var(--text-primary);
-                font-size: 0.9375rem;
-                font-family: 'Roboto Mono', monospace; /* New mono font */
-                transition: all 0.2s ease;
-                outline: none;
-            }
-
-            .input::placeholder {
-                color: var(--text-muted);
-            }
-
-            .input:focus {
-                border-color: var(--accent);
-                box-shadow: 0 0 0 3px var(--accent-glow);
-            }
-
-            .input-icon {
-                position: absolute;
-                left: 14px;
-                top: 50%;
-                transform: translateY(-50%);
-                color: var(--text-muted);
-                width: 20px;
-                height: 20px;
-            }
-
-            .hint {
-                font-size: 0.8125rem;
-                color: var(--text-muted);
-                margin-top: 8px;
-            }
-
-            /* --- MODIFIED: Button Style --- */
-            .btn {
-                width: 100%;
-                padding: 14px 24px;
-                background: var(--accent);
-                border: none;
-                border-bottom: 4px solid #00c78c; /* 3D effect */
-                border-radius: 12px;
-                color: var(--bg-primary);
-                font-size: 1rem;
-                font-weight: 600;
-                font-family: 'Poppins', sans-serif;
-                cursor: pointer;
-                transition: all 0.15s ease-out;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 8px;
-            }
-
-            .btn:hover:not(:disabled) {
-                background: var(--accent-hover);
-                transform: translateY(-1px);
-            }
-
-            .btn:active:not(:disabled) {
-                transform: translateY(2px); /* Press effect */
-                border-bottom-width: 2px;
-            }
-
-            .btn:disabled {
-                opacity: 0.6;
-                cursor: not-allowed;
-            }
-
-            .btn svg {
-                width: 20px;
-                height: 20px;
-            }
-
-            /* Status */
-            .status {
-                margin-top: 24px;
-                padding: 12px 16px;
-                background: var(--bg-secondary);
-                border-radius: 10px;
-                font-size: 0.875rem;
-                color: var(--text-secondary);
-                text-align: center;
-                min-height: 46px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                border: 1px solid var(--border);
-                transition: all 0.3s ease;
-            }
-
-            .status.success {
-                color: var(--bg-primary);
-                border-color: var(--success);
-                background: var(--success);
-            }
-
-            .status.error {
-                color: var(--text-primary);
-                border-color: var(--error);
-                background: var(--error);
             }
             
-            /* Video Preview */
-            .preview {
-                margin-top: 24px;
-                opacity: 0;
-                max-height: 0;
-                overflow: hidden;
-                transition: opacity 0.4s ease, max-height 0.4s ease;
+            .features-title {
+                font-size: 28px;
             }
-
-            .preview.visible {
-                opacity: 1;
-                max-height: 500px;
-            }
-
-            .video-wrapper {
-                position: relative;
-                border-radius: 16px;
-                overflow: hidden;
-                background: #000;
-                border: 1px solid var(--border);
-            }
-
-            .video-wrapper video {
-                width: 100%;
-                max-height: 260px;
-                object-fit: contain;
-                display: block;
-            }
-
-            /* --- MODIFIED: Download Button Style --- */
-            .download-btn {
-                display: flex;
-                margin-top: 16px;
-                padding: 12px 20px;
-                background: var(--success);
-                border: none;
-                border-bottom: 4px solid #00c78c;
-                border-radius: 12px;
-                color: var(--bg-primary);
-                font-size: 0.9375rem;
-                font-weight: 600;
-                text-decoration: none;
-                text-align: center;
-                transition: all 0.15s ease-out;
-                align-items: center;
-                justify-content: center;
-                gap: 8px;
-                opacity: 0;
-                transform: translateY(10px);
-                pointer-events: none;
-            }
-
-            .download-btn.visible {
-                opacity: 1;
-                transform: translateY(0);
-                pointer-events: auto;
-            }
-
-            .download-btn:hover {
-                background: var(--accent-hover);
-                transform: translateY(-1px);
-            }
-
-            .download-btn:active {
-                transform: translateY(2px);
-                border-bottom-width: 2px;
-            }
-
-            .download-btn svg {
-                width: 18px;
-                height: 18px;
-            }
-
-            /* Footer */
-            .footer {
-                text-align: center;
-                margin-top: 32px;
-                padding-top: 24px;
-                border-top: 1px solid var(--border);
-            }
-
-            .footer-date {
-                font-size: 0.8125rem;
-                color: var(--text-muted);
-            }
-            
-            /* Loading spinner */
-            .spinner {
-                width: 16px;
-                height: 16px;
-                border: 2px solid transparent;
-                border-top-color: currentColor;
-                border-radius: 50%;
-                animation: spin 0.8s linear infinite;
-            }
-
-            @keyframes spin {
-                to {
-                    transform: rotate(360deg);
-                }
-            }
-        </style>
-    </head>
-    <body>
-        <!-- Background Pattern -->
-        <div class="bg-pattern"></div>
-
-        <!-- Main Content -->
-        <div class="container">
-            <div class="card">
-                <!-- Language Switcher -->
-                <div class="lang-switcher">
-                    <select class="lang-select" id="langSelect">
-                        <option value="en">English</option>
-                        <option value="ru">Русский</option>
-                        <option value="zh">中文</option>
-                        <option value="es">Español</option>
-                    </select>
+        }
+        
+        /* Animation for download button */
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-cloud-download-alt"></i>
                 </div>
-
-                <!-- Header -->
-                <div class="header">
-                    <div class="logo">
-                        <div class="logo-icon">
-                            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-                            </svg>
-                        </div>
-                        <!-- MODIFIED: New Logo Text -->
-                        <span class="logo-text">Video Grabber</span>
-                    </div>
-                    <!-- MODIFIED: New Tagline -->
-                    <p class="tagline" data-i18n="tagline">Download any video with a link</p>
-                </div>
-
-                <!-- Form -->
-                <div class="form-group">
-                    <label class="label" data-i18n="label">Video URL or Code</label>
-                    <div class="input-wrapper">
-                        <svg class="input-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
-                        </svg>
-                        <input
-                            type="text"
-                            id="url"
-                            class="input"
-                            data-i18n-placeholder="placeholder"
-                            placeholder="e.g., sora.chatgpt.com/p/s_xxx"
-                            autocomplete="off"
-                            spellcheck="false"
-                        />
-                    </div>
-                    <p class="hint" data-i18n="hint">Paste the URL or code of the video you want to download.</p>
-                </div>
-
-                <button id="go" class="btn">
-                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-                    </svg>
-                    <span data-i18n="download">Download</span>
-                </button>
-
-                <!-- Status -->
-                <div id="log" class="status" data-i18n="ready">Ready to download</div>
-
-                <!-- Preview -->
-                <div id="preview" class="preview">
-                    <div class="video-wrapper">
-                        <video id="player" controls playsinline muted loop></video>
-                    </div>
-                    <a id="downloadLink" class="download-btn" download>
-                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-                        </svg>
-                        <span data-i18n="save">Save to device</span>
-                    </a>
-                </div>
-
-                <!-- Footer -->
-                <div class="footer">
-                    <p class="footer-date">© 2025</p>
+                <div>
+                    <div class="logo-text">Sora Downloader</div>
+                    <div class="tagline">Download & enhance Sora videos without watermark</div>
                 </div>
             </div>
+            <nav>
+                <ul>
+                    <li><a href="#" class="active"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="#"><i class="fas fa-download"></i> Download</a></li>
+                    <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+                    <li><a href="#"><i class="fas fa-question-circle"></i> Help</a></li>
+                </ul>
+            </nav>
+        </header>
+        
+        <div class="main-content">
+            <section class="download-section">
+                <h2 class="section-title"><i class="fas fa-video"></i> Download Sora Video</h2>
+                
+                <div class="url-input-container">
+                    <i class="fas fa-link url-icon"></i>
+                    <input type="text" class="url-input" id="videoUrl" placeholder="Paste Sora video URL here...">
+                </div>
+                
+                <div class="enhance-options">
+                    <div class="option-group">
+                        <div class="option-title"><i class="fas fa-magic"></i> Enhancement Options</div>
+                        <div class="option-grid">
+                            <div class="option-item active" id="removeWatermark">
+                                <div class="option-checkbox">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div>
+                                    <div>Remove Watermark</div>
+                                    <div class="tagline">No watermark on downloaded video</div>
+                                </div>
+                            </div>
+                            <div class="option-item" id="enhanceQuality">
+                                <div class="option-checkbox">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div>
+                                    <div>Enhance Quality</div>
+                                    <div class="tagline">AI-powered upscaling</div>
+                                </div>
+                            </div>
+                            <div class="option-item" id="trimVideo">
+                                <div class="option-checkbox">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div>
+                                    <div>Trim Video</div>
+                                    <div class="tagline">Select specific segments</div>
+                                </div>
+                            </div>
+                            <div class="option-item" id="extractAudio">
+                                <div class="option-checkbox">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div>
+                                    <div>Extract Audio</div>
+                                    <div class="tagline">MP3 format available</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="option-group">
+                        <div class="option-title"><i class="fas fa-sliders-h"></i> Quality Settings</div>
+                        <div class="slider-header">
+                            <span>Output Quality</span>
+                            <span class="slider-value" id="qualityValue">High (1080p)</span>
+                        </div>
+                        <input type="range" min="1" max="4" value="3" class="slider" id="qualitySlider">
+                        <div style="display: flex; justify-content: space-between; margin-top: 5px; font-size: 12px; color: #94a3b8;">
+                            <span>Low (480p)</span>
+                            <span>Medium (720p)</span>
+                            <span>High (1080p)</span>
+                            <span>Max (4K)</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="download-btn pulse" id="downloadBtn">
+                    <i class="fas fa-download"></i> Download Enhanced Video
+                </button>
+            </section>
+            
+            <section class="preview-section">
+                <h2 class="section-title"><i class="fas fa-eye"></i> Video Preview</h2>
+                
+                <div class="video-preview" id="videoPreview">
+                    <div class="preview-placeholder">
+                        <i class="fas fa-film"></i>
+                        <p>Video preview will appear here</p>
+                        <p>After you paste a URL, you'll see the video preview</p>
+                    </div>
+                </div>
+                
+                <div class="video-info">
+                    <div class="info-row">
+                        <span class="info-label">Video Status:</span>
+                        <span class="info-value" id="statusValue">Ready to download</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Original Quality:</span>
+                        <span class="info-value">1080p</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Watermark:</span>
+                        <span class="info-value">Detected <span class="watermark-badge">Will be removed</span></span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Enhanced Quality:</span>
+                        <span class="info-value" id="enhancedQuality">1080p (AI Enhanced)</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Estimated Size:</span>
+                        <span class="info-value">~125 MB</span>
+                    </div>
+                </div>
+            </section>
         </div>
-
-        <script>
-            // Localization (now with updated English text)
-            const i18n = {
-                ru: {
-                    tagline: 'Скачивайте любое видео по ссылке',
-                    label: 'URL или код видео',
-                    placeholder: 'например, sora.chatgpt.com/p/s_xxx',
-                    hint: 'Вставьте URL или код видео, которое хотите скачать.',
-                    download: 'Скачать',
-                    ready: 'Готов к скачиванию',
-                    downloading: 'Скачивание...',
-                    processing: 'Обработка...',
-                    save: 'Сохранить на устройство',
-                    error_url: 'Введите URL видео',
-                    error_network: 'Ошибка сети',
-                },
-                en: {
-                    tagline: 'Download any video with a link',
-                    label: 'Video URL or Code',
-                    placeholder: 'e.g., sora.chatgpt.com/p/s_xxx',
-                    hint: 'Paste the URL or code of the video you want to download.',
-                    download: 'Download',
-                    ready: 'Ready to download',
-                    downloading: 'Downloading...',
-                    processing: 'Processing...',
-                    save: 'Save to device',
-                    error_url: 'Please enter video URL',
-                    error_network: 'Network error',
-                },
-                zh: {
-                    tagline: '通过链接下载任何视频',
-                    label: '视频链接或代码',
-                    placeholder: '例如 sora.chatgpt.com/p/s_xxx',
-                    hint: '粘贴您想下载的视频的链接或代码。',
-                    download: '下载',
-                    ready: '准备下载',
-                    downloading: '下载中...',
-                    processing: '处理中...',
-                    save: '保存到设备',
-                    error_url: '请输入视频链接',
-                    error_network: '网络错误',
-                },
-                es: {
-                    tagline: 'Descarga cualquier video con un enlace',
-                    label: 'URL o código del video',
-                    placeholder: 'ej. sora.chatgpt.com/p/s_xxx',
-                    hint: 'Pega la URL o el código del video que quieres descargar.',
-                    download: 'Descargar',
-                    ready: 'Listo para descargar',
-                    downloading: 'Descargando...',
-                    processing: 'Procesando...',
-                    save: 'Guardar en dispositivo',
-                    error_url: 'Ingresa la URL del video',
-                    error_network: 'Error de red',
-                },
-            };
-
-            let currentLang = localStorage.getItem('sora_lang') || 'en';
-
-            function t(key) {
-                return i18n[currentLang]?.[key] || i18n.en[key] || key;
-            }
-
-            function updateLanguage(lang) {
-                currentLang = lang;
-                localStorage.setItem('sora_lang', lang);
-
-                document.querySelectorAll('[data-i18n]').forEach((el) => {
-                    const key = el.getAttribute('data-i18n');
-                    el.textContent = t(key);
-                });
-
-                document.querySelectorAll('[data-i18n-placeholder]').forEach((el) => {
-                    const key = el.getAttribute('data-i18n-placeholder');
-                    el.placeholder = t(key);
-                });
-
-                const langSelect = document.getElementById('langSelect');
-                if (langSelect) langSelect.value = lang;
-
-                document.documentElement.lang = lang;
-            }
-
-            const langSelect = document.getElementById('langSelect');
-            langSelect.addEventListener('change', (e) => {
-                updateLanguage(e.target.value);
-            });
-
-            updateLanguage(currentLang);
-
-            // Elements
-            const urlInput = document.getElementById('url');
-            const log = document.getElementById('log');
-            const player = document.getElementById('player');
-            const goBtn = document.getElementById('go');
-            const downloadLink = document.getElementById('downloadLink');
-            const preview = document.getElementById('preview');
-
-            // Download handler
-            goBtn.addEventListener('click', async () => {
-                const url = urlInput.value.trim();
-
-                if (!url) {
-                    log.textContent = t('error_url');
-                    log.className = 'status error';
-                    return;
+        
+        <section class="features-section">
+            <h2 class="features-title">Why Choose Sora Downloader?</h2>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-ban"></i>
+                    </div>
+                    <h3 class="feature-title">No Watermark</h3>
+                    <p class="feature-desc">Download Sora videos completely without watermarks. Our advanced algorithm removes all branding for a clean viewing experience.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h3 class="feature-title">AI Enhancement</h3>
+                    <p class="feature-desc">Enhance video quality using AI upscaling technology. Improve resolution, stabilize footage, and optimize colors automatically.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3 class="feature-title">Fast Processing</h3>
+                    <p class="feature-desc">High-speed downloading and processing. Get your enhanced videos quickly without compromising on quality.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="feature-title">Safe & Secure</h3>
+                    <p class="feature-desc">Your privacy is our priority. We don't store your videos or personal data. All processing happens locally on your device.</p>
+                </div>
+            </div>
+        </section>
+        
+        <footer>
+            <p>Sora Downloader &copy; 2023 - A tool for downloading and enhancing Sora videos without watermarks</p>
+            <p>This is a demonstration interface. For actual video downloading, ensure you have proper rights to download the content.</p>
+            <div class="footer-links">
+                <a href="#"><i class="fas fa-shield-alt"></i> Privacy Policy</a>
+                <a href="#"><i class="fas fa-file-contract"></i> Terms of Service</a>
+                <a href="#"><i class="fas fa-envelope"></i> Contact Us</a>
+                <a href="#"><i class="fab fa-github"></i> GitHub</a>
+            </div>
+        </footer>
+    </div>
+    
+    <script>
+        // DOM Elements
+        const videoUrlInput = document.getElementById('videoUrl');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const qualitySlider = document.getElementById('qualitySlider');
+        const qualityValue = document.getElementById('qualityValue');
+        const enhancedQuality = document.getElementById('enhancedQuality');
+        const statusValue = document.getElementById('statusValue');
+        const videoPreview = document.getElementById('videoPreview');
+        const optionItems = document.querySelectorAll('.option-item');
+        
+        // Quality mapping
+        const qualityMap = {
+            1: { label: 'Low (480p)', enhanced: '480p' },
+            2: { label: 'Medium (720p)', enhanced: '720p (AI Enhanced)' },
+            3: { label: 'High (1080p)', enhanced: '1080p (AI Enhanced)' },
+            4: { label: 'Max (4K)', enhanced: '4K (AI Enhanced)' }
+        };
+        
+        // Toggle option items
+        optionItems.forEach(item => {
+            item.addEventListener('click', () => {
+                item.classList.toggle('active');
+                
+                // Update status based on options
+                if (item.id === 'removeWatermark' && item.classList.contains('active')) {
+                    updateStatus('Watermark will be removed');
                 }
-
-                log.innerHTML = '<div class="spinner"></div>&nbsp;&nbsp;' + t('downloading');
-                log.className = 'status';
-                player.removeAttribute('src');
-                downloadLink.classList.remove('visible');
-                preview.classList.remove('visible');
-                goBtn.disabled = true;
-                goBtn.innerHTML = '<div class="spinner"></div>&nbsp;&nbsp;' + t('processing');
-
-                try {
-                    const resp = await fetch('/download', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ url }),
-                    });
-
-                    const data = await resp.json();
-
-                    if (!resp.ok) {
-                        log.textContent = data?.error || resp.statusText;
-                        log.className = 'status error';
-                        return;
-                    }
-
-                    // Simplified the log message
-                    log.textContent = 'Success! ' + data.filename + ' [' + data.size + ']';
-                    log.className = 'status success';
-
-                    player.src = data.cleanUrl;
-                    player.load();
-                    preview.classList.add('visible');
-
-                    downloadLink.href = data.cleanUrl;
-                    downloadLink.download = data.filename;
-                    downloadLink.classList.add('visible');
-                } catch (e) {
-                    log.textContent = t('error_network') + ': ' + e.message;
-                    log.className = 'status error';
-                } finally {
-                    goBtn.disabled = false;
-                    goBtn.innerHTML = `
-                      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                      </svg>
-                      <span data-i18n="download">${t('download')}</span>
+                
+                if (item.id === 'enhanceQuality' && item.classList.contains('active')) {
+                    updateStatus('Quality enhancement enabled');
+                }
+            });
+        });
+        
+        // Update quality display
+        qualitySlider.addEventListener('input', () => {
+            const value = qualitySlider.value;
+            qualityValue.textContent = qualityMap[value].label;
+            enhancedQuality.textContent = qualityMap[value].enhanced;
+            
+            // Update status
+            updateStatus(`Quality set to ${qualityMap[value].label}`);
+        });
+        
+        // Video URL input handler
+        videoUrlInput.addEventListener('input', () => {
+            if (videoUrlInput.value.length > 10) {
+                // Show preview placeholder with loading state
+                videoPreview.innerHTML = `
+                    <div class="preview-placeholder">
+                        <i class="fas fa-spinner fa-spin" style="color:#3b82f6;"></i>
+                        <p>Loading video preview...</p>
+                        <p style="font-size: 14px; margin-top: 10px;">Sample Sora video preview</p>
+                    </div>
+                `;
+                
+                // Update status
+                updateStatus('Video URL detected. Processing...');
+                
+                // Simulate video loading
+                setTimeout(() => {
+                    videoPreview.innerHTML = `
+                        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; flex-direction: column; padding: 20px; text-align: center;">
+                            <div style="width: 100%; height: 180px; background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); border-radius: 10px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-play-circle" style="font-size: 60px; color: rgba(255,255,255,0.8);"></i>
+                            </div>
+                            <h3 style="margin-bottom: 10px; color: #f1f5f9;">Sora AI Generated Video</h3>
+                            <p style="color: #94a3b8; font-size: 14px;">Preview of your enhanced video without watermark</p>
+                        </div>
                     `;
-                }
-            });
-
-            // Enter to download
-            urlInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') goBtn.click();
-            });
-        </script>
-    </body>
+                    updateStatus('Video ready for download');
+                }, 1500);
+            } else if (videoUrlInput.value.length === 0) {
+                // Reset preview
+                videoPreview.innerHTML = `
+                    <div class="preview-placeholder">
+                        <i class="fas fa-film"></i>
+                        <p>Video preview will appear here</p>
+                        <p>After you paste a URL, you'll see the video preview</p>
+                    </div>
+                `;
+                updateStatus('Ready to download');
+            }
+        });
+        
+        // Download button handler
+        downloadBtn.addEventListener('click', () => {
+            if (videoUrlInput.value.length < 10) {
+                alert('Please enter a valid Sora video URL');
+                videoUrlInput.focus();
+                return;
+            }
+            
+            // Show downloading state
+            const originalText = downloadBtn.innerHTML;
+            downloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+            downloadBtn.disabled = true;
+            downloadBtn.classList.remove('pulse');
+            
+            updateStatus('Downloading and enhancing video...');
+            
+            // Simulate download process
+            setTimeout(() => {
+                updateStatus('Video downloaded successfully!');
+                downloadBtn.innerHTML = '<i class="fas fa-check"></i> Download Complete!';
+                
+                // Reset button after 3 seconds
+                setTimeout(() => {
+                    downloadBtn.innerHTML = originalText;
+                    downloadBtn.disabled = false;
+                    downloadBtn.classList.add('pulse');
+                    updateStatus('Ready for another download');
+                }, 3000);
+            }, 3000);
+        });
+        
+        // Update status function
+        function updateStatus(text) {
+            statusValue.textContent = text;
+        }
+        
+        // Initialize with sample URL on load (for demo purposes)
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                videoUrlInput.value = 'https://sora.com/videos/ai-generated-beach-sunset-4k';
+                videoUrlInput.dispatchEvent(new Event('input'));
+            }, 1000);
+        });
+    </script>
+</body>
 </html>
