@@ -3,8 +3,9 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <!-- MODIFIED: Changed Title to Sora Downloader -->
         <title>Sora Downloader</title>
-        <link rel="icon" type="image/svg+p/s_xxx" href="/favicon.svg" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="apple-touch-icon" href="/favicon.svg" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -157,7 +158,7 @@
                 color: var(--bg-primary); /* Icon color to contrast with green */
             }
 
-            /* Logo Text Style */
+            /* MODIFIED: Logo Text Style */
             .logo-text {
                 font-size: 2.25rem; /* Larger title */
                 font-weight: 700;
@@ -187,7 +188,7 @@
                 position: relative;
             }
 
-            /* Input Style - Padded for actions */
+            /* MODIFIED: Input Style - Padded for actions */
             .input {
                 width: 100%;
                 padding: 14px 16px;
@@ -263,55 +264,6 @@
                 font-size: 0.8125rem;
                 color: var(--text-muted);
                 margin-top: 8px;
-            }
-
-            /* ADDED: Checkbox Control Container */
-            .checkbox-control {
-                display: flex;
-                align-items: center;
-                margin-bottom: 20px;
-                gap: 12px;
-                cursor: pointer;
-                user-select: none;
-            }
-
-            /* ADDED: Custom Checkbox Style */
-            .checkbox-input {
-                appearance: none;
-                -webkit-appearance: none;
-                width: 20px;
-                height: 20px;
-                border: 1px solid var(--border);
-                border-radius: 6px;
-                background-color: var(--bg-secondary);
-                position: relative;
-                cursor: pointer;
-                transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
-            }
-
-            .checkbox-input:checked {
-                background-color: var(--accent);
-                border-color: var(--accent);
-                box-shadow: 0 0 8px var(--accent-glow);
-            }
-
-            .checkbox-input:checked::after {
-                content: '';
-                position: absolute;
-                top: 2px;
-                left: 6px;
-                width: 5px;
-                height: 10px;
-                border: solid var(--bg-primary);
-                border-width: 0 2px 2px 0;
-                transform: rotate(45deg);
-            }
-
-            .checkbox-label {
-                color: var(--text-secondary);
-                font-size: 0.9375rem;
-                font-weight: 500;
-                flex-grow: 1;
             }
 
             /* Button Style */
@@ -519,8 +471,10 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
                             </svg>
                         </div>
+                        <!-- MODIFIED: Changed Logo Text to Sora Downloader -->
                         <span class="logo-text">Sora Downloader</span>
                     </div>
+                    <!-- MODIFIED: New Sora Tagline -->
                     <p class="tagline" data-i18n="tagline">Download your generated Sora videos with ease</p>
                 </div>
 
@@ -540,7 +494,7 @@
                             autocomplete="off"
                             spellcheck="false"
                         />
-                        <!-- Paste/Clear Buttons -->
+                        <!-- NEW FUNCTIONALITY: Paste/Clear Buttons -->
                         <div class="input-actions">
                             <button class="action-btn" id="pasteBtn" title="Paste URL from Clipboard">
                                 <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -556,12 +510,6 @@
                     </div>
                     <p class="hint" data-i18n="hint">Paste the URL or code of the video you want to download.</p>
                 </div>
-                
-                <!-- NEW FUNCTION: Remove Watermark Checkbox -->
-                <label class="checkbox-control" for="removeWatermark">
-                    <input type="checkbox" id="removeWatermark" class="checkbox-input" />
-                    <span class="checkbox-label" data-i18n="remove_watermark">Remove Watermark (Fast Grabbing)</span>
-                </label>
 
                 <button id="go" class="btn">
                     <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -586,7 +534,7 @@
                     </a>
                 </div>
 
-                <!-- Footer - With Author Info -->
+                <!-- Footer - UPDATED: Added author below date -->
                 <div class="footer">
                     <p class="footer-date">© 2025</p>
                     <p class="author-info">made by Johnrelle</p>
@@ -595,7 +543,7 @@
         </div>
 
         <script>
-            // Localization (UPDATED: Added new feature texts)
+            // Localization (UPDATED: Sora-specific texts)
             const i18n = {
                 ru: {
                     tagline: 'Легко скачивайте сгенерированные видео Sora',
@@ -610,9 +558,6 @@
                     error_url: 'Введите URL видео Sora',
                     error_network: 'Ошибка сети',
                     error_paste: 'Нет разрешения для вставки',
-                    // NEW
-                    remove_watermark: 'Удалить водяной знак (Быстрое скачивание)',
-                    removing_watermark: 'Удаление водяного знака...',
                 },
                 en: {
                     tagline: 'Download your generated Sora videos with ease',
@@ -627,9 +572,6 @@
                     error_url: 'Please enter Sora video URL',
                     error_network: 'Network error',
                     error_paste: 'Clipboard paste denied.',
-                    // NEW
-                    remove_watermark: 'Remove Watermark (Fast Grabbing)',
-                    removing_watermark: 'Removing Watermark...',
                 },
                 zh: {
                     tagline: '轻松下载您生成的 Sora 视频',
@@ -644,9 +586,6 @@
                     error_url: '请输入 Sora 视频链接',
                     error_network: '网络错误',
                     error_paste: '剪贴板粘贴被拒绝。',
-                    // NEW
-                    remove_watermark: '去除水印（快速抓取）',
-                    removing_watermark: '正在去除水印...',
                 },
                 es: {
                     tagline: 'Descarga fácilmente tus videos generados por Sora',
@@ -661,9 +600,6 @@
                     error_url: 'Ingresa la URL del video de Sora',
                     error_network: 'Error de red',
                     error_paste: 'Permiso de pegar del portapapeles denegado.',
-                    // NEW
-                    remove_watermark: 'Eliminar marca de agua (Agarre rápido)',
-                    removing_watermark: 'Eliminando marca de agua...',
                 },
             };
 
@@ -710,11 +646,9 @@
             // Action Buttons
             const pasteBtn = document.getElementById('pasteBtn');
             const clearBtn = document.getElementById('clearBtn');
-            // NEW FEATURE ELEMENT
-            const removeWatermarkCheckbox = document.getElementById('removeWatermark');
 
 
-            // Handle Paste and Clear actions
+            // NEW FUNCTION: Handle Paste and Clear actions
             function handleInputActions() {
                 if (urlInput.value.length > 0) {
                     clearBtn.style.display = 'flex';
@@ -742,7 +676,8 @@
                     const text = await navigator.clipboard.readText();
                     if (text) {
                         urlInput.value = text.trim();
-                        handleInputActions(); 
+                        handleInputActions(); // Update buttons immediately
+                        // Optionally trigger log clear
                         log.textContent = t('ready');
                         log.className = 'status';
                     }
@@ -756,9 +691,10 @@
             // Clear button handler
             clearBtn.addEventListener('click', () => {
                 urlInput.value = '';
-                handleInputActions(); 
+                handleInputActions(); // Update buttons immediately
                 log.textContent = t('ready');
                 log.className = 'status';
+                // Also clear preview/download links for clean slate
                 player.removeAttribute('src');
                 downloadLink.classList.remove('visible');
                 preview.classList.remove('visible');
@@ -768,22 +704,15 @@
             // Download handler
             goBtn.addEventListener('click', async () => {
                 const url = urlInput.value.trim();
-                const removeWatermark = removeWatermarkCheckbox.checked;
 
                 if (!url) {
                     log.textContent = t('error_url');
                     log.className = 'status error';
                     return;
                 }
-                
-                // --- Loading UI Start ---
-                let loadingMessage = t('downloading');
-                // Use a more specific message if watermark removal is requested
-                if (removeWatermark) {
-                    loadingMessage = t('removing_watermark');
-                }
 
-                log.innerHTML = '<div class="spinner"></div>&nbsp;&nbsp;' + loadingMessage;
+                // --- Loading UI Start ---
+                log.innerHTML = '<div class="spinner"></div>&nbsp;&nbsp;' + t('downloading');
                 log.className = 'status';
                 player.removeAttribute('src');
                 downloadLink.classList.remove('visible');
@@ -794,11 +723,11 @@
                 // --- Loading UI End ---
 
                 try {
-                    // NOTE: The backend needs to read the 'removeWatermark' flag in the JSON body.
+                    // NOTE: This URL is a placeholder for a backend service that would actually process the Sora link.
                     const resp = await fetch('/download', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ url, removeWatermark }), // <-- NEW FLAG IN PAYLOAD
+                        body: JSON.stringify({ url }),
                     });
 
                     const data = await resp.json();
@@ -832,6 +761,7 @@
                       </svg>
                       <span data-i18n="download">${t('download')}</span>
                     `;
+                    // Ensure the span text is updated if the language was changed during loading
                     updateLanguage(currentLang);
                 }
             });
