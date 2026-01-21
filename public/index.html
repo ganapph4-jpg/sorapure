@@ -604,49 +604,41 @@
         const downloadLink = document.getElementById('downloadLink');
         const preview = document.getElementById('preview');
 
-        // Download handler
-        goBtn.addEventListener('click', async () => {
-            const url = urlInput.value.trim();
+        let inputTimeout; // For debouncing the input event
 
-            if (!url) {
-                log.textContent = TEXT_CONSTANTS.error_url;
-                log.className = 'status error';
-                return;
-            }
+        // New function to handle the core logic of fetching/preview
+        async function fetchVideoAndDisplayPreview(url) {
+            if (goBtn.disabled) return; // Prevent interference if button is already processing
 
-            log.innerHTML = '<div class="spinner"></div>&nbsp;&nbsp;' + TEXT_CONSTANTS.downloading;
+            log.innerHTML = '<div class="spinner"></div>&nbsp;&nbsp;' + TEXT_CONSTANTS.processing;
             log.className = 'status';
             player.removeAttribute('src');
             downloadLink.classList.remove('visible');
             preview.classList.remove('visible');
-            goBtn.disabled = true;
-            goBtn.innerHTML = '<div class="spinner"></div>&nbsp;&nbsp;' + TEXT_CONSTANTS.processing;
+            goBtn.disabled = true; // Disable main button during processing
 
             try {
-                // *** Simulated Network Request for Demo ***
-                // Replace with actual API call if implementing backend
+                // Mock API Call Simulation (2 seconds to simulate network/processing)
                 await new Promise(resolve => setTimeout(resolve, 2000)); 
                 
+                // Mock Data: Assume success on valid URL format
                 const data = {
                     cleanUrl: 'demo_video.mp4', // Placeholder URL
                     filename: 'sora-video-20260122',
                     size: '12.5MB',
-                    source: 2, // 1 for no watermark, 2 for watermark detected
-                    delogoApplied: true // Delogo applied in this mock
+                    source: 2, 
+                    delogoApplied: true 
                 };
                 
                 const resp = { ok: true };
-                // *** End Simulated Network Request ***
 
                 if (!resp.ok) {
-                    // This part would handle actual API errors
                     log.textContent = TEXT_CONSTANTS.error_network + ': (Server error)';
                     log.className = 'status error';
                     return;
                 }
 
-                const sourceInfo =
-                    data.source === 1
+                const sourceInfo = data.source === 1
                         ? ` (${TEXT_CONSTANTS.no_watermark})`
                         : data.delogoApplied
                             ? ` (${TEXT_CONSTANTS.watermark_removed})`
@@ -659,13 +651,14 @@
                 preview.classList.add('visible');
 
                 downloadLink.href = data.cleanUrl;
-                downloadLink.download = data.filename + '.mp4'; // Added .mp4 extension for clarity
+                downloadLink.download = data.filename + '.mp4'; 
                 downloadLink.classList.add('visible');
+
             } catch (e) {
                 log.textContent = TEXT_CONSTANTS.error_network + ': ' + (e.message || 'Unknown error');
                 log.className = 'status error';
             } finally {
-                goBtn.disabled = false;
+                goBtn.disabled = false; // Re-enable button
                 goBtn.innerHTML = `
                     <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -673,6 +666,39 @@
                     <span>${TEXT_CONSTANTS.download}</span>
                 `;
             }
+        }
+
+        // Input Listener (to handle paste/typing)
+        urlInput.addEventListener('input', () => {
+            clearTimeout(inputTimeout); // Clear previous timeout
+
+            const url = urlInput.value.trim();
+
+            if (url.length > 10) { // Check for minimum length to start fetching
+                // Debounce: Wait 800ms after last input to start fetching
+                inputTimeout = setTimeout(() => {
+                    fetchVideoAndDisplayPreview(url);
+                }, 800);
+            } else if (url.length === 0) {
+                // Reset state on empty input
+                log.textContent = TEXT_CONSTANTS.ready;
+                log.className = 'status';
+                player.removeAttribute('src');
+                downloadLink.classList.remove('visible');
+                preview.classList.remove('visible');
+                goBtn.disabled = false;
+            }
+        });
+
+        // Click handler (manual trigger)
+        goBtn.addEventListener('click', () => {
+            const url = urlInput.value.trim();
+            if (!url) {
+                log.textContent = TEXT_CONSTANTS.error_url;
+                log.className = 'status error';
+                return;
+            }
+            fetchVideoAndDisplayPreview(url);
         });
 
         // Enter to download
