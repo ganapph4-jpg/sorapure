@@ -1,784 +1,685 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sora Downloader | Watermark-Free Video Enhancement</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SoraPure | Watermark-Free Download</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400&display=swap"
+        rel="stylesheet" />
     <style>
+        :root {
+            --bg-primary: #0a0f1a;
+            --bg-secondary: #0d1526;
+            --bg-card: rgba(15, 25, 45, 0.9);
+            --accent: #38bdf8;
+            --accent-hover: #7dd3fc;
+            --accent-glow: rgba(56, 189, 248, 0.3);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border: rgba(148, 163, 184, 0.15);
+            --success: #4ade80;
+            --error: #f87171;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
+        html {
+            font-size: 16px;
+        }
+
         body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            color: #f1f5f9;
-            line-height: 1.6;
+            font-family:
+                'Inter',
+                -apple-system,
+                BlinkMacSystemFont,
+                sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
             min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
         }
-        
+
+        /* Gradient Background */
+        .bg-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(ellipse at 20% 20%, rgba(56, 189, 248, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(56, 189, 248, 0.05) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(15, 23, 42, 1) 0%, var(--bg-primary) 100%);
+            z-index: 0;
+        }
+
+        /* Main Container */
         .container {
-            max-width: 1200px;
+            position: relative;
+            z-index: 1;
+            max-width: 520px;
             margin: 0 auto;
-            padding: 20px;
-        }
-        
-        header {
+            padding: 24px 16px;
+            min-height: 100vh;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 0;
-            margin-bottom: 40px;
-            border-bottom: 1px solid #334155;
+            flex-direction: column;
+            justify-content: center;
         }
-        
+
+        /* Card */
+        .card {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 32px 24px;
+            box-shadow:
+                0 10px 30px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+
+        /* Logo & Header */
+        .header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
         .logo {
-            display: flex;
+            display: inline-flex;
             align-items: center;
             gap: 12px;
-        }
-        
-        .logo-icon {
-            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
-            width: 42px;
-            height: 42px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-        }
-        
-        .logo-text {
-            font-family: 'Poppins', sans-serif;
-            font-size: 28px;
-            font-weight: 700;
-            background: linear-gradient(to right, #60a5fa, #a78bfa);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-        
-        .tagline {
-            font-size: 14px;
-            color: #94a3b8;
-            margin-top: -5px;
-        }
-        
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 25px;
-        }
-        
-        nav a {
-            color: #cbd5e1;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 16px;
-            transition: color 0.3s;
-            padding: 5px 0;
-        }
-        
-        nav a:hover, nav a.active {
-            color: #60a5fa;
-        }
-        
-        .main-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            margin-bottom: 60px;
-        }
-        
-        .download-section {
-            background: rgba(30, 41, 59, 0.8);
-            border-radius: 16px;
-            padding: 35px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-            border: 1px solid #475569;
-        }
-        
-        .section-title {
-            font-family: 'Poppins', sans-serif;
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 25px;
-            color: #f8fafc;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .section-title i {
-            color: #60a5fa;
-        }
-        
-        .url-input-container {
-            position: relative;
-            margin-bottom: 25px;
-        }
-        
-        .url-input {
-            width: 100%;
-            padding: 16px 20px 16px 50px;
-            background: #1e293b;
-            border: 2px solid #475569;
-            border-radius: 12px;
-            color: #f1f5f9;
-            font-size: 16px;
-            transition: all 0.3s;
-        }
-        
-        .url-input:focus {
-            outline: none;
-            border-color: #60a5fa;
-            box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
-        }
-        
-        .url-icon {
-            position: absolute;
-            left: 18px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #94a3b8;
-        }
-        
-        .enhance-options {
-            margin-bottom: 30px;
-        }
-        
-        .option-group {
-            margin-bottom: 20px;
-        }
-        
-        .option-title {
-            font-weight: 600;
-            margin-bottom: 12px;
-            color: #e2e8f0;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .option-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-        
-        .option-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 15px;
-            background: #1e293b;
-            border-radius: 10px;
-            border: 1px solid #475569;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .option-item:hover {
-            border-color: #60a5fa;
-            background: rgba(96, 165, 250, 0.05);
-        }
-        
-        .option-item.active {
-            border-color: #60a5fa;
-            background: rgba(96, 165, 250, 0.1);
-        }
-        
-        .option-checkbox {
-            width: 20px;
-            height: 20px;
-            border-radius: 5px;
-            border: 2px solid #64748b;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
-        }
-        
-        .option-item.active .option-checkbox {
-            background: #3b82f6;
-            border-color: #3b82f6;
-        }
-        
-        .option-item.active .option-checkbox i {
-            font-size: 12px;
-            color: white;
-        }
-        
-        .quality-slider {
-            width: 100%;
-            margin-top: 10px;
-        }
-        
-        .slider-header {
-            display: flex;
-            justify-content: space-between;
             margin-bottom: 8px;
         }
-        
-        .slider-value {
-            color: #60a5fa;
-            font-weight: 600;
-        }
-        
-        .slider {
-            -webkit-appearance: none;
-            width: 100%;
-            height: 8px;
-            border-radius: 5px;
-            background: #334155;
-            outline: none;
-        }
-        
-        .slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            background: #3b82f6;
-            cursor: pointer;
-            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
-        }
-        
-        .download-btn {
-            width: 100%;
-            padding: 18px;
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 18px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--accent), #0ea5e9);
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
-            margin-top: 10px;
-        }
-        
-        .download-btn:hover {
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
-        }
-        
-        .download-btn:active {
-            transform: translateY(0);
-        }
-        
-        .preview-section {
-            background: rgba(30, 41, 59, 0.8);
-            border-radius: 16px;
-            padding: 35px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-            border: 1px solid #475569;
-        }
-        
-        .video-preview {
-            background: #1e293b;
-            border-radius: 12px;
-            height: 300px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 25px;
-            border: 2px dashed #475569;
+            box-shadow: 0 0 24px var(--accent-glow);
+            position: relative;
             overflow: hidden;
         }
-        
-        .preview-placeholder {
-            text-align: center;
-            color: #94a3b8;
+
+        .logo-icon::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% {
+                transform: translateX(-100%) rotate(45deg);
+            }
+
+            100% {
+                transform: translateX(100%) rotate(45deg);
+            }
+        }
+
+        .logo-icon svg {
+            width: 28px;
+            height: 28px;
+            color: white;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo-text {
+            font-size: 1.75rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, var(--text-primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .tagline {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+            margin-top: 4px;
         }
         
-        .preview-placeholder i {
-            font-size: 60px;
-            margin-bottom: 15px;
-            color: #475569;
+        /* Form */
+        .form-group {
+            margin-bottom: 20px;
         }
-        
-        .video-info {
-            background: #1e293b;
-            border-radius: 12px;
-            padding: 20px;
-        }
-        
-        .info-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid #334155;
-        }
-        
-        .info-row:last-child {
-            border-bottom: none;
-        }
-        
-        .info-label {
-            color: #94a3b8;
-        }
-        
-        .info-value {
-            color: #e2e8f0;
+
+        .label {
+            display: block;
+            font-size: 0.8125rem;
             font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            letter-spacing: 0.01em;
         }
-        
-        .features-section {
-            margin-bottom: 60px;
+
+        .input-wrapper {
+            position: relative;
         }
-        
-        .features-title {
-            font-family: 'Poppins', sans-serif;
-            font-size: 32px;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 50px;
-            color: #f8fafc;
+
+        .input {
+            width: 100%;
+            padding: 14px 16px;
+            padding-left: 44px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 0.9375rem;
+            font-family: 'JetBrains Mono', monospace;
+            transition: all 0.2s ease;
+            outline: none;
         }
-        
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
+
+        .input::placeholder {
+            color: var(--text-muted);
         }
-        
-        .feature-card {
-            background: rgba(30, 41, 59, 0.8);
-            border-radius: 16px;
-            padding: 30px;
-            text-align: center;
-            border: 1px solid #475569;
-            transition: transform 0.3s, box-shadow 0.3s;
+
+        .input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
         }
-        
-        .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
-            border-color: #60a5fa;
+
+        .input-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            width: 20px;
+            height: 20px;
         }
-        
-        .feature-icon {
-            width: 70px;
-            height: 70px;
-            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
-            border-radius: 50%;
+
+        .hint {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 8px;
+        }
+
+        /* Button */
+        .btn {
+            width: 100%;
+            padding: 14px 24px;
+            background: linear-gradient(135deg, var(--accent), #0ea5e9);
+            border: none;
+            border-radius: 12px;
+            color: var(--bg-primary);
+            font-size: 0.9375rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 20px;
-            font-size: 30px;
+            gap: 8px;
+            box-shadow: 0 4px 14px var(--accent-glow);
         }
-        
-        .feature-title {
-            font-family: 'Poppins', sans-serif;
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 15px;
-            color: #f8fafc;
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px var(--accent-glow);
         }
-        
-        .feature-desc {
-            color: #cbd5e1;
-            font-size: 15px;
+
+        .btn:active:not(:disabled) {
+            transform: translateY(0);
         }
-        
-        footer {
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Status */
+        .status {
+            margin-top: 20px;
+            padding: 12px 16px;
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
             text-align: center;
-            padding: 30px 0;
-            border-top: 1px solid #334155;
-            color: #94a3b8;
-            font-size: 14px;
-        }
-        
-        .footer-links {
+            min-height: 44px;
             display: flex;
+            align-items: center;
             justify-content: center;
-            gap: 25px;
-            margin-top: 15px;
+            border: 1px solid var(--border);
         }
-        
-        .footer-links a {
-            color: #94a3b8;
+
+        .status.success {
+            color: var(--success);
+            border-color: rgba(74, 222, 128, 0.2);
+            background: rgba(74, 222, 128, 0.05);
+        }
+
+        .status.error {
+            color: var(--error);
+            border-color: rgba(248, 113, 113, 0.2);
+            background: rgba(248, 113, 113, 0.05);
+        }
+
+        /* Video Preview */
+        .preview {
+            margin-top: 20px;
+            display: none;
+        }
+
+        .preview.visible {
+            display: block;
+        }
+
+        .video-wrapper {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .video-wrapper video {
+            width: 100%;
+            max-height: 280px;
+            object-fit: contain;
+            display: block;
+            background: #000;
+        }
+
+        /* Download Button */
+        .download-btn {
+            display: none;
+            margin-top: 12px;
+            padding: 12px 20px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--success);
+            border-radius: 10px;
+            color: var(--success);
+            font-size: 0.875rem;
+            font-weight: 500;
             text-decoration: none;
-            transition: color 0.3s;
+            text-align: center;
+            transition: all 0.2s ease;
         }
-        
-        .footer-links a:hover {
-            color: #60a5fa;
+
+        .download-btn.visible {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
-        
-        .watermark-badge {
-            display: inline-block;
-            background: rgba(239, 68, 68, 0.1);
-            color: #f87171;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 12px;
+
+        .download-btn:hover {
+            background: rgba(74, 222, 128, 0.1);
+        }
+
+        .download-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Features Section */
+        .features-section {
+            margin-top: 40px;
+            padding-top: 40px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .features-title {
+            font-size: 1.5rem;
             font-weight: 600;
-            margin-left: 10px;
+            color: var(--accent);
+            margin-bottom: 25px;
         }
-        
-        @media (max-width: 992px) {
-            .main-content {
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            text-align: left;
+        }
+
+        .feature-card {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 15px;
+            border: 1px solid rgba(56, 189, 248, 0.1);
+        }
+
+        .feature-card svg {
+            width: 24px;
+            height: 24px;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+
+        .feature-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--text-primary);
+        }
+
+        .feature-desc {
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-credit {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+        }
+
+        .footer-date {
+            font-size: 0.625rem;
+            color: var(--text-muted);
+            opacity: 0.7;
+        }
+
+        /* Loading spinner */
+        .spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid transparent;
+            border-top-color: currentColor;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .container {
+                padding: 16px 12px;
+            }
+
+            .card {
+                padding: 24px 16px;
+            }
+
+            .features-grid {
                 grid-template-columns: 1fr;
             }
-            
-            .option-grid {
-                grid-template-columns: 1fr;
+
+            .logo-text {
+                font-size: 1.375rem;
+            }
+
+            .logo-icon {
+                width: 40px;
+                height: 40px;
+                border-radius: 12px;
+            }
+
+            .logo-icon svg {
+                width: 24px;
+                height: 24px;
+            }
+
+            .input {
+                padding: 12px 14px;
+                padding-left: 40px;
+                font-size: 0.875rem;
+            }
+
+            .btn {
+                padding: 12px 20px;
+            }
+
+            .video-wrapper video {
+                max-height: 180px;
             }
         }
-        
-        @media (max-width: 768px) {
-            header {
-                flex-direction: column;
-                gap: 20px;
-                text-align: center;
+
+        @media (min-width: 768px) {
+            .container {
+                padding: 40px 24px;
             }
-            
-            nav ul {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            
-            .features-title {
-                font-size: 28px;
+
+            .card {
+                padding: 40px 32px;
             }
         }
-        
-        /* Animation for download button */
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
-        }
-        
-        .pulse {
-            animation: pulse 2s infinite;
+
+        @media (min-width: 1024px) {
+            .container {
+                max-width: 480px;
+            }
         }
     </style>
 </head>
+
 <body>
+    <!-- Background -->
+    <div class="bg-gradient"></div>
+
+    <!-- Main Content -->
     <div class="container">
-        <header>
-            <div class="logo">
-                <div class="logo-icon">
-                    <i class="fas fa-cloud-download-alt"></i>
+        <div class="card" style="position: relative">
+
+            <!-- Header -->
+            <div class="header">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
+                        </svg>
+                    </div>
+                    <span class="logo-text">SoraPure</span>
                 </div>
-                <div>
-                    <div class="logo-text">Sora Downloader</div>
-                    <div class="tagline">Download & enhance Sora videos without watermark</div>
+                <p class="tagline">Download Sora videos without watermark</p>
+            </div>
+
+            <!-- Form -->
+            <div class="form-group">
+                <label class="label">Video URL or Code</label>
+                <div class="input-wrapper">
+                    <svg class="input-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                    </svg>
+                    <input type="text" id="url" class="input" 
+                        placeholder="sora.chatgpt.com/p/s_xxx or s_xxx" autocomplete="off" spellcheck="false" />
+                </div>
+                <p class="hint">Paste the Sora video URL or video code (s_xxxxx)</p>
+            </div>
+
+            <button id="go" class="btn">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+                <span>Download Video</span>
+            </button>
+
+            <!-- Status -->
+            <div id="log" class="status">Ready to download</div>
+
+            <!-- Preview -->
+            <div id="preview" class="preview">
+                <div class="video-wrapper">
+                    <video id="player" controls></video>
+                </div>
+                <a id="downloadLink" class="download-btn" download>
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span>Save to device</span>
+                </a>
+            </div>
+
+            <!-- Features Section -->
+            <div class="features-section">
+                <h3 class="features-title">Why Choose Sora Downloader?</h3>
+                
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                        <h4 class="feature-title">No Watermark</h4>
+                        <p class="feature-desc">Download Sora videos completely without watermarks. Our advanced algorithm removes all branding for a clean viewing experience.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                        </svg>
+                        <h4 class="feature-title">Multiple Formats</h4>
+                        <p class="feature-desc">Download videos in various formats (MP4, MOV) and select your desired original quality output.</p>
+                    </div>
                 </div>
             </div>
-            <nav>
-                <ul>
-                    <li><a href="#" class="active"><i class="fas fa-home"></i> Home</a></li>
-                    <li><a href="#"><i class="fas fa-download"></i> Download</a></li>
-                    <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
-                    <li><a href="#"><i class="fas fa-question-circle"></i> Help</a></li>
-                </ul>
-            </nav>
-        </header>
-        
-        <div class="main-content">
-            <section class="download-section">
-                <h2 class="section-title"><i class="fas fa-video"></i> Download Sora Video</h2>
-                
-                <div class="url-input-container">
-                    <i class="fas fa-link url-icon"></i>
-                    <input type="text" class="url-input" id="videoUrl" placeholder="Paste Sora video URL here...">
-                </div>
-                
-                <div class="enhance-options">
-                    <div class="option-group">
-                        <div class="option-title"><i class="fas fa-magic"></i> Enhancement Options</div>
-                        <div class="option-grid">
-                            <div class="option-item active" id="removeWatermark">
-                                <div class="option-checkbox">
-                                    <i class="fas fa-check"></i>
-                                </div>
-                                <div>
-                                    <div>Remove Watermark</div>
-                                    <div class="tagline">No watermark on downloaded video</div>
-                                </div>
-                            </div>
-                            <div class="option-item" id="enhanceQuality">
-                                <div class="option-checkbox">
-                                    <i class="fas fa-check"></i>
-                                </div>
-                                <div>
-                                    <div>Enhance Quality</div>
-                                    <div class="tagline">AI-powered upscaling</div>
-                                </div>
-                            </div>
-                            <div class="option-item" id="trimVideo">
-                                <div class="option-checkbox">
-                                    <i class="fas fa-check"></i>
-                                </div>
-                                <div>
-                                    <div>Trim Video</div>
-                                    <div class="tagline">Select specific segments</div>
-                                </div>
-                            </div>
-                            <div class="option-item" id="extractAudio">
-                                <div class="option-checkbox">
-                                    <i class="fas fa-check"></i>
-                                </div>
-                                <div>
-                                    <div>Extract Audio</div>
-                                    <div class="tagline">MP3 format available</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="option-group">
-                        <div class="option-title"><i class="fas fa-sliders-h"></i> Quality Settings</div>
-                        <div class="slider-header">
-                            <span>Output Quality</span>
-                            <span class="slider-value" id="qualityValue">High (1080p)</span>
-                        </div>
-                        <input type="range" min="1" max="4" value="3" class="slider" id="qualitySlider">
-                        <div style="display: flex; justify-content: space-between; margin-top: 5px; font-size: 12px; color: #94a3b8;">
-                            <span>Low (480p)</span>
-                            <span>Medium (720p)</span>
-                            <span>High (1080p)</span>
-                            <span>Max (4K)</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <button class="download-btn pulse" id="downloadBtn">
-                    <i class="fas fa-download"></i> Download Enhanced Video
-                </button>
-            </section>
-            
-            <section class="preview-section">
-                <h2 class="section-title"><i class="fas fa-eye"></i> Video Preview</h2>
-                
-                <div class="video-preview" id="videoPreview">
-                    <div class="preview-placeholder">
-                        <i class="fas fa-film"></i>
-                        <p>Video preview will appear here</p>
-                        <p>After you paste a URL, you'll see the video preview</p>
-                    </div>
-                </div>
-                
-                <div class="video-info">
-                    <div class="info-row">
-                        <span class="info-label">Video Status:</span>
-                        <span class="info-value" id="statusValue">Ready to download</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Original Quality:</span>
-                        <span class="info-value">1080p</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Watermark:</span>
-                        <span class="info-value">Detected <span class="watermark-badge">Will be removed</span></span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Enhanced Quality:</span>
-                        <span class="info-value" id="enhancedQuality">1080p (AI Enhanced)</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Estimated Size:</span>
-                        <span class="info-value">~125 MB</span>
-                    </div>
-                </div>
-            </section>
+
+            <!-- Footer -->
+            <div class="footer">
+                <p class="footer-credit">Created by Johnrelle</p>
+                <p class="footer-date">&copy; 2026</p>
+            </div>
         </div>
-        
-        <section class="features-section">
-            <h2 class="features-title">Why Choose Sora Downloader?</h2>
-            
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-ban"></i>
-                    </div>
-                    <h3 class="feature-title">No Watermark</h3>
-                    <p class="feature-desc">Download Sora videos completely without watermarks. Our advanced algorithm removes all branding for a clean viewing experience.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-rocket"></i>
-                    </div>
-                    <h3 class="feature-title">AI Enhancement</h3>
-                    <p class="feature-desc">Enhance video quality using AI upscaling technology. Improve resolution, stabilize footage, and optimize colors automatically.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-bolt"></i>
-                    </div>
-                    <h3 class="feature-title">Fast Processing</h3>
-                    <p class="feature-desc">High-speed downloading and processing. Get your enhanced videos quickly without compromising on quality.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <h3 class="feature-title">Safe & Secure</h3>
-                    <p class="feature-desc">Your privacy is our priority. We don't store your videos or personal data. All processing happens locally on your device.</p>
-                </div>
-            </div>
-        </section>
-        
-        <footer>
-            <p>Sora Downloader &copy; 2023 - A tool for downloading and enhancing Sora videos without watermarks</p>
-            <p>This is a demonstration interface. For actual video downloading, ensure you have proper rights to download the content.</p>
-            <div class="footer-links">
-                <a href="#"><i class="fas fa-shield-alt"></i> Privacy Policy</a>
-                <a href="#"><i class="fas fa-file-contract"></i> Terms of Service</a>
-                <a href="#"><i class="fas fa-envelope"></i> Contact Us</a>
-                <a href="#"><i class="fab fa-github"></i> GitHub</a>
-            </div>
-        </footer>
     </div>
-    
+
     <script>
-        // DOM Elements
-        const videoUrlInput = document.getElementById('videoUrl');
-        const downloadBtn = document.getElementById('downloadBtn');
-        const qualitySlider = document.getElementById('qualitySlider');
-        const qualityValue = document.getElementById('qualityValue');
-        const enhancedQuality = document.getElementById('enhancedQuality');
-        const statusValue = document.getElementById('statusValue');
-        const videoPreview = document.getElementById('videoPreview');
-        const optionItems = document.querySelectorAll('.option-item');
-        
-        // Quality mapping
-        const qualityMap = {
-            1: { label: 'Low (480p)', enhanced: '480p' },
-            2: { label: 'Medium (720p)', enhanced: '720p (AI Enhanced)' },
-            3: { label: 'High (1080p)', enhanced: '1080p (AI Enhanced)' },
-            4: { label: 'Max (4K)', enhanced: '4K (AI Enhanced)' }
+        // Text constants (since localization is removed)
+        const TEXT_CONSTANTS = {
+            download: 'Download Video',
+            processing: 'Processing...',
+            ready: 'Ready to download',
+            downloading: 'Downloading...',
+            error_url: 'Please enter video URL or code.',
+            error_network: 'Network error',
+            no_watermark: 'no watermark',
+            watermark_removed: 'watermark removed'
         };
-        
-        // Toggle option items
-        optionItems.forEach(item => {
-            item.addEventListener('click', () => {
-                item.classList.toggle('active');
-                
-                // Update status based on options
-                if (item.id === 'removeWatermark' && item.classList.contains('active')) {
-                    updateStatus('Watermark will be removed');
-                }
-                
-                if (item.id === 'enhanceQuality' && item.classList.contains('active')) {
-                    updateStatus('Quality enhancement enabled');
-                }
-            });
-        });
-        
-        // Update quality display
-        qualitySlider.addEventListener('input', () => {
-            const value = qualitySlider.value;
-            qualityValue.textContent = qualityMap[value].label;
-            enhancedQuality.textContent = qualityMap[value].enhanced;
-            
-            // Update status
-            updateStatus(`Quality set to ${qualityMap[value].label}`);
-        });
-        
-        // Video URL input handler
-        videoUrlInput.addEventListener('input', () => {
-            if (videoUrlInput.value.length > 10) {
-                // Show preview placeholder with loading state
-                videoPreview.innerHTML = `
-                    <div class="preview-placeholder">
-                        <i class="fas fa-spinner fa-spin" style="color:#3b82f6;"></i>
-                        <p>Loading video preview...</p>
-                        <p style="font-size: 14px; margin-top: 10px;">Sample Sora video preview</p>
-                    </div>
-                `;
-                
-                // Update status
-                updateStatus('Video URL detected. Processing...');
-                
-                // Simulate video loading
-                setTimeout(() => {
-                    videoPreview.innerHTML = `
-                        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; flex-direction: column; padding: 20px; text-align: center;">
-                            <div style="width: 100%; height: 180px; background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); border-radius: 10px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center;">
-                                <i class="fas fa-play-circle" style="font-size: 60px; color: rgba(255,255,255,0.8);"></i>
-                            </div>
-                            <h3 style="margin-bottom: 10px; color: #f1f5f9;">Sora AI Generated Video</h3>
-                            <p style="color: #94a3b8; font-size: 14px;">Preview of your enhanced video without watermark</p>
-                        </div>
-                    `;
-                    updateStatus('Video ready for download');
-                }, 1500);
-            } else if (videoUrlInput.value.length === 0) {
-                // Reset preview
-                videoPreview.innerHTML = `
-                    <div class="preview-placeholder">
-                        <i class="fas fa-film"></i>
-                        <p>Video preview will appear here</p>
-                        <p>After you paste a URL, you'll see the video preview</p>
-                    </div>
-                `;
-                updateStatus('Ready to download');
-            }
-        });
-        
-        // Download button handler
-        downloadBtn.addEventListener('click', () => {
-            if (videoUrlInput.value.length < 10) {
-                alert('Please enter a valid Sora video URL');
-                videoUrlInput.focus();
+
+        // Elements
+        const urlInput = document.getElementById('url');
+        const log = document.getElementById('log');
+        const player = document.getElementById('player');
+        const goBtn = document.getElementById('go');
+        const downloadLink = document.getElementById('downloadLink');
+        const preview = document.getElementById('preview');
+
+        // Download handler
+        goBtn.addEventListener('click', async () => {
+            const url = urlInput.value.trim();
+
+            if (!url) {
+                log.textContent = TEXT_CONSTANTS.error_url;
+                log.className = 'status error';
                 return;
             }
-            
-            // Show downloading state
-            const originalText = downloadBtn.innerHTML;
-            downloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-            downloadBtn.disabled = true;
-            downloadBtn.classList.remove('pulse');
-            
-            updateStatus('Downloading and enhancing video...');
-            
-            // Simulate download process
-            setTimeout(() => {
-                updateStatus('Video downloaded successfully!');
-                downloadBtn.innerHTML = '<i class="fas fa-check"></i> Download Complete!';
+
+            log.innerHTML = '<div class="spinner"></div>&nbsp;&nbsp;' + TEXT_CONSTANTS.downloading;
+            log.className = 'status';
+            player.removeAttribute('src');
+            downloadLink.classList.remove('visible');
+            preview.classList.remove('visible');
+            goBtn.disabled = true;
+            goBtn.innerHTML = '<div class="spinner"></div>&nbsp;&nbsp;' + TEXT_CONSTANTS.processing;
+
+            try {
+                // *** Simulated Network Request for Demo ***
+                // Replace with actual API call if implementing backend
+                await new Promise(resolve => setTimeout(resolve, 2000)); 
                 
-                // Reset button after 3 seconds
-                setTimeout(() => {
-                    downloadBtn.innerHTML = originalText;
-                    downloadBtn.disabled = false;
-                    downloadBtn.classList.add('pulse');
-                    updateStatus('Ready for another download');
-                }, 3000);
-            }, 3000);
+                const data = {
+                    cleanUrl: 'demo_video.mp4', // Placeholder URL
+                    filename: 'sora-video-20260122',
+                    size: '12.5MB',
+                    source: 2, // 1 for no watermark, 2 for watermark detected
+                    delogoApplied: true // Delogo applied in this mock
+                };
+                
+                const resp = { ok: true };
+                // *** End Simulated Network Request ***
+
+                if (!resp.ok) {
+                    // This part would handle actual API errors
+                    log.textContent = TEXT_CONSTANTS.error_network + ': (Server error)';
+                    log.className = 'status error';
+                    return;
+                }
+
+                const sourceInfo =
+                    data.source === 1
+                        ? ` (${TEXT_CONSTANTS.no_watermark})`
+                        : data.delogoApplied
+                            ? ` (${TEXT_CONSTANTS.watermark_removed})`
+                            : '';
+                log.textContent = data.filename + ' [' + data.size + ']' + sourceInfo;
+                log.className = 'status success';
+
+                player.src = data.cleanUrl;
+                player.load();
+                preview.classList.add('visible');
+
+                downloadLink.href = data.cleanUrl;
+                downloadLink.download = data.filename + '.mp4'; // Added .mp4 extension for clarity
+                downloadLink.classList.add('visible');
+            } catch (e) {
+                log.textContent = TEXT_CONSTANTS.error_network + ': ' + (e.message || 'Unknown error');
+                log.className = 'status error';
+            } finally {
+                goBtn.disabled = false;
+                goBtn.innerHTML = `
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>
+                    <span>${TEXT_CONSTANTS.download}</span>
+                `;
+            }
         });
-        
-        // Update status function
-        function updateStatus(text) {
-            statusValue.textContent = text;
-        }
-        
-        // Initialize with sample URL on load (for demo purposes)
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                videoUrlInput.value = 'https://sora.com/videos/ai-generated-beach-sunset-4k';
-                videoUrlInput.dispatchEvent(new Event('input'));
-            }, 1000);
+
+        // Enter to download
+        urlInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') goBtn.click();
         });
     </script>
 </body>
+
 </html>
