@@ -1,711 +1,845 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>SoraPure | Watermark-Free Download</title>
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="apple-touch-icon" href="/favicon.svg" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400&display=swap"
-        rel="stylesheet" />
-    <style>
-        :root {
-            --bg-primary: #0a0f1a;
-            --bg-secondary: #0d1526;
-            --bg-card: rgba(15, 25, 45, 0.9);
-            --accent: #38bdf8;
-            --accent-hover: #7dd3fc;
-            --accent-glow: rgba(56, 189, 248, 0.3);
-            --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
-            --text-muted: #64748b;
-            --border: rgba(148, 163, 184, 0.15);
-            --success: #4ade80;
-            --error: #f87171;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            font-size: 16px;
-        }
-
-        body {
-            font-family:
-                'Inter',
-                -apple-system,
-                BlinkMacSystemFont,
-                sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
-        }
-
-        /* Gradient Background */
-        .bg-gradient {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background:
-                radial-gradient(ellipse at 20% 20%, rgba(56, 189, 248, 0.08) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 80%, rgba(56, 189, 248, 0.05) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 50%, rgba(15, 23, 42, 1) 0%, var(--bg-primary) 100%);
-            z-index: 0;
-        }
-
-        /* Main Container */
-        .container {
-            position: relative;
-            z-index: 1;
-            max-width: 520px;
-            margin: 0 auto;
-            padding: 24px 16px;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        /* Card */
-        .card {
-            background: var(--bg-card);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 32px 24px;
-            box-shadow:
-                0 10px 30px rgba(0, 0, 0, 0.5),
-                inset 0 1px 0 rgba(255, 255, 255, 0.05);
-        }
-
-        /* Logo & Header */
-        .header {
-            text-align: center;
-            margin-bottom: 32px;
-        }
-
-        .logo {
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 8px;
-        }
-
-        .logo-icon {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, var(--accent), #0ea5e9);
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 0 24px var(--accent-glow);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .logo-icon::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            animation: shine 3s infinite;
-        }
-
-        @keyframes shine {
-            0% {
-                transform: translateX(-100%) rotate(45deg);
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Sora Downloader</title>
+        <link rel="icon" type="image/svg+p/s_xxx" href="/favicon.svg" />
+        <link rel="apple-touch-icon" href="/favicon.svg" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Roboto+Mono&display=swap"
+            rel="stylesheet"
+        />
+        <style>
+            /* --- MODIFIED: NEW COLOR SCHEME (Kept as requested) --- */
+            :root {
+                --bg-primary: #1a1a2e; /* Dark Purple */
+                --bg-secondary: #16213e; /* Darker Blue/Purple */
+                --bg-card: #2c2c54; /* Muted Purple */
+                --accent: #00ffab; /* Vibrant Green */
+                --accent-hover: #00e096;
+                --accent-glow: rgba(0, 255, 171, 0.2);
+                --text-primary: #f0f0f0; /* Soft White */
+                --text-secondary: #a8a8d1; /* Light Purple/Gray */
+                --text-muted: #8080ac;
+                --border: rgba(168, 168, 209, 0.2);
+                --success: #00ffab;
+                --error: #f45b69;
             }
 
-            100% {
-                transform: translateX(100%) rotate(45deg);
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
             }
-        }
 
-        .logo-icon svg {
-            width: 28px;
-            height: 28px;
-            color: white;
-            position: relative;
-            z-index: 1;
-        }
-
-        .logo-text {
-            font-size: 1.75rem;
-            font-weight: 600;
-            letter-spacing: -0.02em;
-            background: linear-gradient(135deg, var(--text-primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .tagline {
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-            font-weight: 400;
-            margin-top: 4px;
-        }
-        
-        /* Form */
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .label {
-            display: block;
-            font-size: 0.8125rem;
-            font-weight: 500;
-            color: var(--text-secondary);
-            margin-bottom: 8px;
-            letter-spacing: 0.01em;
-        }
-
-        .input-wrapper {
-            position: relative;
-        }
-
-        .input {
-            width: 100%;
-            padding: 14px 16px;
-            padding-left: 44px;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            color: var(--text-primary);
-            font-size: 0.9375rem;
-            font-family: 'JetBrains Mono', monospace;
-            transition: all 0.2s ease;
-            outline: none;
-        }
-
-        .input::placeholder {
-            color: var(--text-muted);
-        }
-
-        .input:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px var(--accent-glow);
-        }
-
-        .input-icon {
-            position: absolute;
-            left: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-muted);
-            width: 20px;
-            height: 20px;
-        }
-
-        .hint {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            margin-top: 8px;
-        }
-
-        /* Button */
-        .btn {
-            width: 100%;
-            padding: 14px 24px;
-            background: linear-gradient(135deg, var(--accent), #0ea5e9);
-            border: none;
-            border-radius: 12px;
-            color: var(--bg-primary);
-            font-size: 0.9375rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            box-shadow: 0 4px 14px var(--accent-glow);
-        }
-
-        .btn:hover:not(:disabled) {
-            transform: translateY(-1px);
-            box-shadow: 0 6px 20px var(--accent-glow);
-        }
-
-        .btn:active:not(:disabled) {
-            transform: translateY(0);
-        }
-
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-        .btn svg {
-            width: 18px;
-            height: 18px;
-        }
-
-        /* Status */
-        .status {
-            margin-top: 20px;
-            padding: 12px 16px;
-            background: var(--bg-secondary);
-            border-radius: 10px;
-            font-size: 0.8125rem;
-            color: var(--text-secondary);
-            text-align: center;
-            min-height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid var(--border);
-        }
-
-        .status.success {
-            color: var(--success);
-            border-color: rgba(74, 222, 128, 0.2);
-            background: rgba(74, 222, 128, 0.05);
-        }
-
-        .status.error {
-            color: var(--error);
-            border-color: rgba(248, 113, 113, 0.2);
-            background: rgba(248, 113, 113, 0.05);
-        }
-
-        /* Video Preview */
-        .preview {
-            margin-top: 20px;
-            display: none;
-        }
-
-        .preview.visible {
-            display: block;
-        }
-
-        .video-wrapper {
-            position: relative;
-            border-radius: 12px;
-            overflow: hidden;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-        }
-
-        .video-wrapper video {
-            width: 100%;
-            max-height: 280px;
-            object-fit: contain;
-            display: block;
-            background: #000;
-        }
-
-        /* Download Button */
-        .download-btn {
-            display: none;
-            margin-top: 12px;
-            padding: 12px 20px;
-            background: var(--bg-secondary);
-            border: 1px solid var(--success);
-            border-radius: 10px;
-            color: var(--success);
-            font-size: 0.875rem;
-            font-weight: 500;
-            text-decoration: none;
-            text-align: center;
-            transition: all 0.2s ease;
-        }
-
-        .download-btn.visible {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .download-btn:hover {
-            background: rgba(74, 222, 128, 0.1);
-        }
-
-        .download-btn svg {
-            width: 16px;
-            height: 16px;
-        }
-
-        /* Features Section */
-        .features-section {
-            margin-top: 40px;
-            padding-top: 40px;
-            border-top: 1px solid var(--border);
-            text-align: center;
-        }
-
-        .features-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--accent);
-            margin-bottom: 25px;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            text-align: left;
-        }
-
-        .feature-card {
-            background: var(--bg-secondary);
-            border-radius: 12px;
-            padding: 15px;
-            border: 1px solid rgba(56, 189, 248, 0.1);
-        }
-
-        .feature-card svg {
-            width: 24px;
-            height: 24px;
-            color: var(--accent);
-            margin-bottom: 8px;
-        }
-
-        .feature-title {
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 5px;
-            color: var(--text-primary);
-        }
-
-        .feature-desc {
-            font-size: 0.8125rem;
-            color: var(--text-secondary);
-        }
-
-        /* Footer */
-        .footer {
-            text-align: center;
-            margin-top: 24px;
-            padding-top: 20px;
-            border-top: 1px solid var(--border);
-        }
-
-        .footer-credit {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            margin-bottom: 5px;
-        }
-
-        .footer-date {
-            font-size: 0.625rem;
-            color: var(--text-muted);
-            opacity: 0.7;
-        }
-
-        /* Loading spinner */
-        .spinner {
-            width: 16px;
-            height: 16px;
-            border: 2px solid transparent;
-            border-top-color: currentColor;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
+            html {
+                font-size: 16px;
             }
-        }
 
-        /* Responsive */
-        @media (max-width: 480px) {
+            body {
+                font-family:
+                    'Poppins',
+                    -apple-system,
+                    BlinkMacSystemFont,
+                    sans-serif;
+                background: var(--bg-primary);
+                color: var(--text-primary);
+                min-height: 100vh;
+                overflow-x: hidden;
+                position: relative;
+            }
+
+            /* Background Pattern */
+            .bg-pattern {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                pointer-events: none;
+                z-index: 0;
+                background-image:
+                    radial-gradient(var(--text-muted) 0.5px, transparent 0.5px),
+                    radial-gradient(var(--text-muted) 0.5px, var(--bg-primary) 0.5px);
+                background-size: 20px 20px;
+                background-position: 0 0, 10px 10px;
+                opacity: 0.1;
+            }
+
+            /* Main Container */
             .container {
-                padding: 16px 12px;
-            }
-
-            .card {
+                position: relative;
+                z-index: 1;
+                max-width: 520px;
+                margin: 0 auto;
                 padding: 24px 16px;
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
             }
 
-            .features-grid {
-                grid-template-columns: 1fr;
+            /* Card Style */
+            .card {
+                background: var(--bg-card);
+                border: 1px solid var(--border);
+                border-radius: 24px;
+                padding: 32px 24px;
+                box-shadow: 0 10px 40px rgba(0,0,0,0.3);
             }
 
-            .logo-text {
-                font-size: 1.375rem;
+            /* Language Switcher */
+            .lang-switcher {
+                position: absolute;
+                top: 16px;
+                right: 16px;
+                z-index: 10;
             }
 
+            .lang-select {
+                appearance: none;
+                -webkit-appearance: none;
+                background: var(--bg-secondary);
+                border: 1px solid var(--border);
+                border-radius: 8px;
+                padding: 8px 32px 8px 12px;
+                color: var(--text-primary);
+                font-size: 0.8125rem;
+                font-family: inherit;
+                cursor: pointer;
+                outline: none;
+                transition: all 0.2s ease;
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a8a8d1' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+                background-repeat: no-repeat;
+                background-position: right 10px center;
+            }
+
+            .lang-select:hover {
+                border-color: var(--accent);
+            }
+
+            .lang-select:focus {
+                border-color: var(--accent);
+                box-shadow: 0 0 0 3px var(--accent-glow);
+            }
+            
+            /* Logo & Header */
+            .header {
+                text-align: center;
+                margin-bottom: 32px;
+            }
+
+            .logo {
+                display: inline-flex;
+                align-items: center;
+                gap: 12px;
+                margin-bottom: 8px;
+            }
+
+            /* Logo Icon Style */
             .logo-icon {
-                width: 40px;
-                height: 40px;
-                border-radius: 12px;
+                width: 48px;
+                height: 48px;
+                background: var(--accent);
+                border-radius: 14px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 0 24px var(--accent-glow);
             }
 
             .logo-icon svg {
-                width: 24px;
-                height: 24px;
+                width: 28px;
+                height: 28px;
+                color: var(--bg-primary); /* Icon color to contrast with green */
             }
 
-            .input {
-                padding: 12px 14px;
-                padding-left: 40px;
+            /* Logo Text Style */
+            .logo-text {
+                font-size: 2.25rem; /* Larger title */
+                font-weight: 700;
+                color: var(--text-primary);
+            }
+
+            .tagline {
+                font-size: 1rem;
+                color: var(--text-secondary);
+                font-weight: 400;
+            }
+
+            /* Form */
+            .form-group {
+                margin-bottom: 20px;
+            }
+
+            .label {
+                display: block;
                 font-size: 0.875rem;
+                font-weight: 500;
+                color: var(--text-secondary);
+                margin-bottom: 8px;
             }
 
+            .input-wrapper {
+                position: relative;
+            }
+
+            /* Input Style - Padded for actions */
+            .input {
+                width: 100%;
+                padding: 14px 16px;
+                padding-left: 44px;
+                padding-right: 44px; /* Added right padding for action buttons */
+                background: var(--bg-secondary);
+                border: 1px solid var(--border);
+                border-radius: 12px;
+                color: var(--text-primary);
+                font-size: 0.9375rem;
+                font-family: 'Roboto Mono', monospace; 
+                transition: all 0.2s ease;
+                outline: none;
+            }
+
+            .input::placeholder {
+                color: var(--text-muted);
+            }
+
+            .input:focus {
+                border-color: var(--accent);
+                box-shadow: 0 0 0 3px var(--accent-glow);
+            }
+
+            .input-icon {
+                position: absolute;
+                left: 14px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: var(--text-muted);
+                width: 20px;
+                height: 20px;
+                z-index: 2; 
+            }
+            
+            /* Input Actions Container */
+            .input-actions {
+                position: absolute;
+                right: 0;
+                top: 50%;
+                transform: translateY(-50%);
+                display: flex;
+                gap: 4px;
+                padding-right: 10px;
+                z-index: 3;
+            }
+
+            /* Action Button Style */
+            .action-btn {
+                background: transparent;
+                border: none;
+                color: var(--text-secondary);
+                cursor: pointer;
+                padding: 4px;
+                border-radius: 4px;
+                transition: color 0.2s ease, background 0.2s ease;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .action-btn:hover {
+                color: var(--accent);
+                background: rgba(0, 255, 171, 0.1);
+            }
+            
+            .action-btn svg {
+                width: 18px;
+                height: 18px;
+            }
+
+            .hint {
+                font-size: 0.8125rem;
+                color: var(--text-muted);
+                margin-top: 8px;
+            }
+
+            /* ADDED: Checkbox Control Container */
+            .checkbox-control {
+                display: flex;
+                align-items: center;
+                margin-bottom: 20px;
+                gap: 12px;
+                cursor: pointer;
+                user-select: none;
+            }
+
+            /* ADDED: Custom Checkbox Style */
+            .checkbox-input {
+                appearance: none;
+                -webkit-appearance: none;
+                width: 20px;
+                height: 20px;
+                border: 1px solid var(--border);
+                border-radius: 6px;
+                background-color: var(--bg-secondary);
+                position: relative;
+                cursor: pointer;
+                transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
+            }
+
+            .checkbox-input:checked {
+                background-color: var(--accent);
+                border-color: var(--accent);
+                box-shadow: 0 0 8px var(--accent-glow);
+            }
+
+            .checkbox-input:checked::after {
+                content: '';
+                position: absolute;
+                top: 2px;
+                left: 6px;
+                width: 5px;
+                height: 10px;
+                border: solid var(--bg-primary);
+                border-width: 0 2px 2px 0;
+                transform: rotate(45deg);
+            }
+
+            .checkbox-label {
+                color: var(--text-secondary);
+                font-size: 0.9375rem;
+                font-weight: 500;
+                flex-grow: 1;
+            }
+
+            /* Button Style */
             .btn {
-                padding: 12px 20px;
+                width: 100%;
+                padding: 14px 24px;
+                background: var(--accent);
+                border: none;
+                border-bottom: 4px solid #00c78c; /* 3D effect */
+                border-radius: 12px;
+                color: var(--bg-primary);
+                font-size: 1rem;
+                font-weight: 600;
+                font-family: 'Poppins', sans-serif;
+                cursor: pointer;
+                transition: all 0.15s ease-out;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+            }
+
+            .btn:hover:not(:disabled) {
+                background: var(--accent-hover);
+                transform: translateY(-1px);
+            }
+
+            .btn:active:not(:disabled) {
+                transform: translateY(2px); /* Press effect */
+                border-bottom-width: 2px;
+            }
+
+            .btn:disabled {
+                opacity: 0.6;
+                cursor: not-allowed;
+            }
+
+            .btn svg {
+                width: 20px;
+                height: 20px;
+            }
+
+            /* Status */
+            .status {
+                margin-top: 24px;
+                padding: 12px 16px;
+                background: var(--bg-secondary);
+                border-radius: 10px;
+                font-size: 0.875rem;
+                color: var(--text-secondary);
+                text-align: center;
+                min-height: 46px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border: 1px solid var(--border);
+                transition: all 0.3s ease;
+            }
+
+            .status.success {
+                color: var(--bg-primary);
+                border-color: var(--success);
+                background: var(--success);
+            }
+
+            .status.error {
+                color: var(--text-primary);
+                border-color: var(--error);
+                background: var(--error);
+            }
+            
+            /* Video Preview */
+            .preview {
+                margin-top: 24px;
+                opacity: 0;
+                max-height: 0;
+                overflow: hidden;
+                transition: opacity 0.4s ease, max-height 0.4s ease;
+            }
+
+            .preview.visible {
+                opacity: 1;
+                max-height: 500px;
+            }
+
+            .video-wrapper {
+                position: relative;
+                border-radius: 16px;
+                overflow: hidden;
+                background: #000;
+                border: 1px solid var(--border);
             }
 
             .video-wrapper video {
-                max-height: 180px;
-            }
-        }
-
-        @media (min-width: 768px) {
-            .container {
-                padding: 40px 24px;
+                width: 100%;
+                max-height: 260px;
+                object-fit: contain;
+                display: block;
             }
 
-            .card {
-                padding: 40px 32px;
+            /* Download Button Style */
+            .download-btn {
+                display: flex;
+                margin-top: 16px;
+                padding: 12px 20px;
+                background: var(--success);
+                border: none;
+                border-bottom: 4px solid #00c78c;
+                border-radius: 12px;
+                color: var(--bg-primary);
+                font-size: 0.9375rem;
+                font-weight: 600;
+                text-decoration: none;
+                text-align: center;
+                transition: all 0.15s ease-out;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                opacity: 0;
+                transform: translateY(10px);
+                pointer-events: none;
             }
-        }
 
-        @media (min-width: 1024px) {
-            .container {
-                max-width: 480px;
+            .download-btn.visible {
+                opacity: 1;
+                transform: translateY(0);
+                pointer-events: auto;
             }
-        }
-    </style>
-</head>
 
-<body>
-    <!-- Background -->
-    <div class="bg-gradient"></div>
+            .download-btn:hover {
+                background: var(--accent-hover);
+                transform: translateY(-1px);
+            }
 
-    <!-- Main Content -->
-    <div class="container">
-        <div class="card" style="position: relative">
+            .download-btn:active {
+                transform: translateY(2px);
+                border-bottom-width: 2px;
+            }
 
-            <!-- Header -->
-            <div class="header">
-                <div class="logo">
-                    <div class="logo-icon">
-                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
-                        </svg>
+            .download-btn svg {
+                width: 18px;
+                height: 18px;
+            }
+
+            /* Footer */
+            .footer {
+                text-align: center;
+                margin-top: 32px;
+                padding-top: 24px;
+                border-top: 1px solid var(--border);
+            }
+
+            .footer-date {
+                font-size: 0.8125rem;
+                color: var(--text-muted);
+            }
+            
+            /* Author Info Style */
+            .author-info {
+                font-size: 0.875rem;
+                color: var(--text-secondary);
+                margin-top: 4px; 
+                font-weight: 500;
+            }
+            
+            /* Loading spinner */
+            .spinner {
+                width: 16px;
+                height: 16px;
+                border: 2px solid transparent;
+                border-top-color: currentColor;
+                border-radius: 50%;
+                animation: spin 0.8s linear infinite;
+            }
+
+            @keyframes spin {
+                to {
+                    transform: rotate(360deg);
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Background Pattern -->
+        <div class="bg-pattern"></div>
+
+        <!-- Main Content -->
+        <div class="container">
+            <div class="card">
+                <!-- Language Switcher -->
+                <div class="lang-switcher">
+                    <select class="lang-select" id="langSelect">
+                        <option value="en">English</option>
+                        <option value="ru">Русский</option>
+                        <option value="zh">中文</option>
+                        <option value="es">Español</option>
+                    </select>
+                </div>
+
+                <!-- Header -->
+                <div class="header">
+                    <div class="logo">
+                        <div class="logo-icon">
+                            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                            </svg>
+                        </div>
+                        <span class="logo-text">Sora Downloader</span>
                     </div>
-                    <span class="logo-text">SoraPure</span>
+                    <p class="tagline" data-i18n="tagline">Download your generated Sora videos with ease</p>
                 </div>
-                <p class="tagline">Download Sora videos without watermark</p>
-            </div>
 
-            <!-- Form -->
-            <div class="form-group">
-                <label class="label">Video URL or Code</label>
-                <div class="input-wrapper">
-                    <svg class="input-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
-                    </svg>
-                    <input type="text" id="url" class="input" 
-                        placeholder="sora.chatgpt.com/p/s_xxx or s_xxx" autocomplete="off" spellcheck="false" />
+                <!-- Form -->
+                <div class="form-group">
+                    <label class="label" data-i18n="label">Sora Video URL or Code</label>
+                    <div class="input-wrapper">
+                        <svg class="input-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
+                        </svg>
+                        <input
+                            type="text"
+                            id="url"
+                            class="input"
+                            data-i18n-placeholder="placeholder"
+                            placeholder="e.g., sora.openai.com/p/s_xxx"
+                            autocomplete="off"
+                            spellcheck="false"
+                        />
+                        <!-- Paste/Clear Buttons -->
+                        <div class="input-actions">
+                            <button class="action-btn" id="pasteBtn" title="Paste URL from Clipboard">
+                                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 10 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                            </button>
+                            <button class="action-btn" id="clearBtn" title="Clear Input" style="display:none;">
+                                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <p class="hint" data-i18n="hint">Paste the URL or code of the video you want to download.</p>
                 </div>
-                <p class="hint">Paste the Sora video URL or video code (s_xxxxx)</p>
-            </div>
-
-            <button id="go" class="btn">
-                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                </svg>
-                <span>Download Video</span>
-            </button>
-
-            <!-- Status -->
-            <div id="log" class="status">Ready to download</div>
-
-            <!-- Preview -->
-            <div id="preview" class="preview">
-                <div class="video-wrapper">
-                    <video id="player" controls></video>
-                </div>
-                <a id="downloadLink" class="download-btn" download>
-                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <span>Save to device</span>
-                </a>
-            </div>
-
-            <!-- Features Section -->
-            <div class="features-section">
-                <h3 class="features-title">Why Choose Sora Downloader?</h3>
                 
-                <div class="features-grid">
-                    <div class="feature-card">
-                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                        <h4 class="feature-title">No Watermark</h4>
-                        <p class="feature-desc">Download Sora videos completely without watermarks. Our advanced algorithm removes all branding for a clean viewing experience.</p>
-                    </div>
+                <!-- NEW FUNCTION: Remove Watermark Checkbox -->
+                <label class="checkbox-control" for="removeWatermark">
+                    <input type="checkbox" id="removeWatermark" class="checkbox-input" />
+                    <span class="checkbox-label" data-i18n="remove_watermark">Remove Watermark (Fast Grabbing)</span>
+                </label>
 
-                    <div class="feature-card">
-                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                        </svg>
-                        <h4 class="feature-title">Multiple Formats</h4>
-                        <p class="feature-desc">Download videos in various formats (MP4, MOV) and select your desired original quality output.</p>
+                <button id="go" class="btn">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                    </svg>
+                    <span data-i18n="download">Download</span>
+                </button>
+
+                <!-- Status (Loading UI is handled here via spinner and class changes) -->
+                <div id="log" class="status" data-i18n="ready">Ready to download</div>
+
+                <!-- Preview -->
+                <div id="preview" class="preview">
+                    <div class="video-wrapper">
+                        <video id="player" controls playsinline muted loop></video>
                     </div>
+                    <a id="downloadLink" class="download-btn" download>
+                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                        </svg>
+                        <span data-i18n="save">Save to device</span>
+                    </a>
                 </div>
-            </div>
 
-            <!-- Footer -->
-            <div class="footer">
-                <p class="footer-credit">Created by Johnrelle</p>
-                <p class="footer-date">&copy; 2026</p>
+                <!-- Footer - With Author Info -->
+                <div class="footer">
+                    <p class="footer-date">© 2025</p>
+                    <p class="author-info">made by Johnrelle</p>
+                </div>
             </div>
         </div>
-    </div>
 
-    <script>
-        // Text constants (since localization is removed)
-        const TEXT_CONSTANTS = {
-            download: 'Download Video',
-            processing: 'Processing...',
-            ready: 'Ready to download',
-            downloading: 'Downloading...',
-            error_url: 'Please enter video URL or code.',
-            error_network: 'Network error',
-            no_watermark: 'no watermark',
-            watermark_removed: 'watermark removed'
-        };
+        <script>
+            // Localization (UPDATED: Added new feature texts)
+            const i18n = {
+                ru: {
+                    tagline: 'Легко скачивайте сгенерированные видео Sora',
+                    label: 'URL или код видео Sora',
+                    placeholder: 'например, sora.openai.com/p/s_xxx',
+                    hint: 'Вставьте URL или код видео Sora, которое хотите скачать.',
+                    download: 'Скачать',
+                    ready: 'Готов к скачиванию',
+                    downloading: 'Скачивание...',
+                    processing: 'Обработка...',
+                    save: 'Сохранить на устройство',
+                    error_url: 'Введите URL видео Sora',
+                    error_network: 'Ошибка сети',
+                    error_paste: 'Нет разрешения для вставки',
+                    // NEW
+                    remove_watermark: 'Удалить водяной знак (Быстрое скачивание)',
+                    removing_watermark: 'Удаление водяного знака...',
+                },
+                en: {
+                    tagline: 'Download your generated Sora videos with ease',
+                    label: 'Sora Video URL or Code',
+                    placeholder: 'e.g., sora.openai.com/p/s_xxx',
+                    hint: 'Paste the URL or code of the Sora video you want to download.',
+                    download: 'Download',
+                    ready: 'Ready to download',
+                    downloading: 'Downloading...',
+                    processing: 'Processing...',
+                    save: 'Save to device',
+                    error_url: 'Please enter Sora video URL',
+                    error_network: 'Network error',
+                    error_paste: 'Clipboard paste denied.',
+                    // NEW
+                    remove_watermark: 'Remove Watermark (Fast Grabbing)',
+                    removing_watermark: 'Removing Watermark...',
+                },
+                zh: {
+                    tagline: '轻松下载您生成的 Sora 视频',
+                    label: 'Sora 视频链接或代码',
+                    placeholder: '例如 sora.openai.com/p/s_xxx',
+                    hint: '粘贴您想下载的 Sora 视频的链接或代码。',
+                    download: '下载',
+                    ready: '准备下载',
+                    downloading: '下载中...',
+                    processing: '处理中...',
+                    save: '保存到设备',
+                    error_url: '请输入 Sora 视频链接',
+                    error_network: '网络错误',
+                    error_paste: '剪贴板粘贴被拒绝。',
+                    // NEW
+                    remove_watermark: '去除水印（快速抓取）',
+                    removing_watermark: '正在去除水印...',
+                },
+                es: {
+                    tagline: 'Descarga fácilmente tus videos generados por Sora',
+                    label: 'URL o código del video de Sora',
+                    placeholder: 'ej. sora.openai.com/p/s_xxx',
+                    hint: 'Pega la URL o el código del video de Sora que quieres descargar.',
+                    download: 'Descargar',
+                    ready: 'Listo para descargar',
+                    downloading: 'Descargando...',
+                    processing: 'Procesando...',
+                    save: 'Guardar en dispositivo',
+                    error_url: 'Ingresa la URL del video de Sora',
+                    error_network: 'Error de red',
+                    error_paste: 'Permiso de pegar del portapapeles denegado.',
+                    // NEW
+                    remove_watermark: 'Eliminar marca de agua (Agarre rápido)',
+                    removing_watermark: 'Eliminando marca de agua...',
+                },
+            };
 
-        // Elements
-        const urlInput = document.getElementById('url');
-        const log = document.getElementById('log');
-        const player = document.getElementById('player');
-        const goBtn = document.getElementById('go');
-        const downloadLink = document.getElementById('downloadLink');
-        const preview = document.getElementById('preview');
+            let currentLang = localStorage.getItem('sora_lang') || 'en';
 
-        let inputTimeout; // For debouncing the input event
-
-        // New function to handle the core logic of fetching/preview
-        async function fetchVideoAndDisplayPreview(url) {
-            if (goBtn.disabled) return; // Prevent interference if button is already processing
-
-            log.innerHTML = '<div class="spinner"></div>&nbsp;&nbsp;' + TEXT_CONSTANTS.processing;
-            log.className = 'status';
-            player.removeAttribute('src');
-            downloadLink.classList.remove('visible');
-            preview.classList.remove('visible');
-            goBtn.disabled = true; // Disable main button during processing
-
-            try {
-                // Mock API Call Simulation (2 seconds to simulate network/processing)
-                await new Promise(resolve => setTimeout(resolve, 2000)); 
-                
-                // Mock Data: Assume success on valid URL format
-                const data = {
-                    cleanUrl: 'demo_video.mp4', // Placeholder URL
-                    filename: 'sora-video-20260122',
-                    size: '12.5MB',
-                    source: 2, 
-                    delogoApplied: true 
-                };
-                
-                const resp = { ok: true };
-
-                if (!resp.ok) {
-                    log.textContent = TEXT_CONSTANTS.error_network + ': (Server error)';
-                    log.className = 'status error';
-                    return;
-                }
-
-                const sourceInfo = data.source === 1
-                        ? ` (${TEXT_CONSTANTS.no_watermark})`
-                        : data.delogoApplied
-                            ? ` (${TEXT_CONSTANTS.watermark_removed})`
-                            : '';
-                log.textContent = data.filename + ' [' + data.size + ']' + sourceInfo;
-                log.className = 'status success';
-
-                player.src = data.cleanUrl;
-                player.load();
-                preview.classList.add('visible');
-
-                downloadLink.href = data.cleanUrl;
-                downloadLink.download = data.filename + '.mp4'; 
-                downloadLink.classList.add('visible');
-
-            } catch (e) {
-                log.textContent = TEXT_CONSTANTS.error_network + ': ' + (e.message || 'Unknown error');
-                log.className = 'status error';
-            } finally {
-                goBtn.disabled = false; // Re-enable button
-                goBtn.innerHTML = `
-                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                    </svg>
-                    <span>${TEXT_CONSTANTS.download}</span>
-                `;
+            function t(key) {
+                return i18n[currentLang]?.[key] || i18n.en[key] || key;
             }
-        }
 
-        // Input Listener (to handle paste/typing)
-        urlInput.addEventListener('input', () => {
-            clearTimeout(inputTimeout); // Clear previous timeout
+            function updateLanguage(lang) {
+                currentLang = lang;
+                localStorage.setItem('sora_lang', lang);
 
-            const url = urlInput.value.trim();
+                document.querySelectorAll('[data-i18n]').forEach((el) => {
+                    const key = el.getAttribute('data-i18n');
+                    el.textContent = t(key);
+                });
 
-            if (url.length > 10) { // Check for minimum length to start fetching
-                // Debounce: Wait 800ms after last input to start fetching
-                inputTimeout = setTimeout(() => {
-                    fetchVideoAndDisplayPreview(url);
-                }, 800);
-            } else if (url.length === 0) {
-                // Reset state on empty input
-                log.textContent = TEXT_CONSTANTS.ready;
+                document.querySelectorAll('[data-i18n-placeholder]').forEach((el) => {
+                    const key = el.getAttribute('data-i18n-placeholder');
+                    el.placeholder = t(key);
+                });
+
+                const langSelect = document.getElementById('langSelect');
+                if (langSelect) langSelect.value = lang;
+
+                document.documentElement.lang = lang;
+            }
+
+            const langSelect = document.getElementById('langSelect');
+            langSelect.addEventListener('change', (e) => {
+                updateLanguage(e.target.value);
+            });
+
+            updateLanguage(currentLang);
+
+            // Elements
+            const urlInput = document.getElementById('url');
+            const log = document.getElementById('log');
+            const player = document.getElementById('player');
+            const goBtn = document.getElementById('go');
+            const downloadLink = document.getElementById('downloadLink');
+            const preview = document.getElementById('preview');
+            // Action Buttons
+            const pasteBtn = document.getElementById('pasteBtn');
+            const clearBtn = document.getElementById('clearBtn');
+            // NEW FEATURE ELEMENT
+            const removeWatermarkCheckbox = document.getElementById('removeWatermark');
+
+
+            // Handle Paste and Clear actions
+            function handleInputActions() {
+                if (urlInput.value.length > 0) {
+                    clearBtn.style.display = 'flex';
+                    pasteBtn.style.display = 'none';
+                } else {
+                    clearBtn.style.display = 'none';
+                    // Only show paste button if the browser supports the Clipboard API
+                    if (navigator.clipboard && navigator.clipboard.readText) {
+                        pasteBtn.style.display = 'flex';
+                    } else {
+                         pasteBtn.style.display = 'none';
+                    }
+                }
+            }
+            
+            // Initial check on load
+            handleInputActions(); 
+
+            // Add listener for input changes
+            urlInput.addEventListener('input', handleInputActions);
+
+            // Paste button handler
+            pasteBtn.addEventListener('click', async () => {
+                try {
+                    const text = await navigator.clipboard.readText();
+                    if (text) {
+                        urlInput.value = text.trim();
+                        handleInputActions(); 
+                        log.textContent = t('ready');
+                        log.className = 'status';
+                    }
+                } catch (err) {
+                    console.error('Failed to read clipboard contents: ', err);
+                    log.textContent = t('error_paste');
+                    log.className = 'status error';
+                }
+            });
+
+            // Clear button handler
+            clearBtn.addEventListener('click', () => {
+                urlInput.value = '';
+                handleInputActions(); 
+                log.textContent = t('ready');
                 log.className = 'status';
                 player.removeAttribute('src');
                 downloadLink.classList.remove('visible');
                 preview.classList.remove('visible');
-                goBtn.disabled = false;
-            }
-        });
+            });
 
-        // Click handler (manual trigger)
-        goBtn.addEventListener('click', () => {
-            const url = urlInput.value.trim();
-            if (!url) {
-                log.textContent = TEXT_CONSTANTS.error_url;
-                log.className = 'status error';
-                return;
-            }
-            fetchVideoAndDisplayPreview(url);
-        });
 
-        // Enter to download
-        urlInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') goBtn.click();
-        });
-    </script>
-</body>
+            // Download handler
+            goBtn.addEventListener('click', async () => {
+                const url = urlInput.value.trim();
+                const removeWatermark = removeWatermarkCheckbox.checked;
 
+                if (!url) {
+                    log.textContent = t('error_url');
+                    log.className = 'status error';
+                    return;
+                }
+                
+                // --- Loading UI Start ---
+                let loadingMessage = t('downloading');
+                // Use a more specific message if watermark removal is requested
+                if (removeWatermark) {
+                    loadingMessage = t('removing_watermark');
+                }
+
+                log.innerHTML = '<div class="spinner"></div>&nbsp;&nbsp;' + loadingMessage;
+                log.className = 'status';
+                player.removeAttribute('src');
+                downloadLink.classList.remove('visible');
+                preview.classList.remove('visible');
+                goBtn.disabled = true;
+                // Button shows processing/loading
+                goBtn.innerHTML = '<div class="spinner"></div>&nbsp;&nbsp;' + t('processing');
+                // --- Loading UI End ---
+
+                try {
+                    // NOTE: The backend needs to read the 'removeWatermark' flag in the JSON body.
+                    const resp = await fetch('/download', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ url, removeWatermark }), // <-- NEW FLAG IN PAYLOAD
+                    });
+
+                    const data = await resp.json();
+
+                    if (!resp.ok) {
+                        log.textContent = data?.error || resp.statusText;
+                        log.className = 'status error';
+                        return;
+                    }
+
+                    // Success state
+                    log.textContent = 'Success! ' + data.filename + ' [' + data.size + ']';
+                    log.className = 'status success';
+
+                    player.src = data.cleanUrl;
+                    player.load();
+                    preview.classList.add('visible');
+
+                    downloadLink.href = data.cleanUrl;
+                    downloadLink.download = data.filename;
+                    downloadLink.classList.add('visible');
+                } catch (e) {
+                    log.textContent = t('error_network') + ': ' + e.message;
+                    log.className = 'status error';
+                } finally {
+                    // Restore button state
+                    goBtn.disabled = false;
+                    goBtn.innerHTML = `
+                      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                      </svg>
+                      <span data-i18n="download">${t('download')}</span>
+                    `;
+                    updateLanguage(currentLang);
+                }
+            });
+
+            // Enter to download
+            urlInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') goBtn.click();
+            });
+        </script>
+    </body>
 </html>
