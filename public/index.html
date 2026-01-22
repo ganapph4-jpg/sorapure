@@ -647,7 +647,7 @@
                     
                     <!-- NEW: Quality Selector Buttons (Dynamically Populated) -->
                     <div id="qualitySelector" class="quality-selector">
-                        <span data-i18n="available_qualities" style="color: var(--text-secondary); flex-shrink: 0;">Available Qualities:</span>
+                        <span data-i18n="available_qualities" style="color: var(--text-secondary);">Available Qualities:</span>
                         <!-- Buttons added by JS -->
                     </div>
                     <!-- END NEW: Quality Selector Buttons -->
@@ -717,15 +717,16 @@
                     info_duration: 'Длительность:', 
                     info_prompt: 'Промпт:', 
                     no_prompt_info: 'Информация о промпте недоступна',
+                    // REMOVED: resolution_label, resolution_hint, res_best
                     status_retrieved: 'Видео получено, анализ...',
                     status_watermark: 'Удаление водяного знака, подготовка файла...',
+                    // NEW ENHANCE KEYS
                     enhance: 'Улучшенное масштабирование',
                     enhancing: 'Улучшение...',
                     status_upscale: 'Использование AI-улучшения (2x)...',
                     status_recompiling: 'Перекомпиляция Enhanced 4K видео...',
                     success_enhanced: 'Успех! Enhanced видео готово.',
-                    available_qualities: 'Доступное качество:',
-                    status_selected_quality: 'Успех! Автоматически выбрано: ', // NEW
+                    available_qualities: 'Доступное качество:', // NEW
                 },
                 en: {
                     tagline: 'Download your generated Sora videos with ease',
@@ -744,15 +745,16 @@
                     info_duration: 'Duration:', 
                     info_prompt: 'Prompt:', 
                     no_prompt_info: 'Prompt information not available', 
+                    // REMOVED: resolution_label, resolution_hint, res_best
                     status_retrieved: 'Video retrieved, analyzing...',
                     status_watermark: 'Removing watermark, preparing file...',
+                    // NEW ENHANCE KEYS
                     enhance: 'Enhanced Upscaler',
                     enhancing: 'Enhancing...',
                     status_upscale: 'Applying AI Enhancement (2x)...',
                     status_recompiling: 'Recompiling Enhanced 4K video...',
                     success_enhanced: 'Success! Enhanced video is ready.',
-                    available_qualities: 'Available Qualities:',
-                    status_selected_quality: 'Success! Automatically selected: ', // NEW
+                    available_qualities: 'Available Qualities:', // NEW
                 },
                 zh: {
                     tagline: '轻松下载您生成的 Sora 视频',
@@ -771,15 +773,16 @@
                     info_duration: '时长:', 
                     info_prompt: '提示词:', 
                     no_prompt_info: '提示词信息不可用', 
+                    // REMOVED: resolution_label, resolution_hint, res_best
                     status_retrieved: '已获取视频，正在分析...',
                     status_watermark: '正在移除水印，准备文件...',
+                    // NEW ENHANCE KEYS
                     enhance: '增强型缩放器',
                     enhancing: '增强中...',
                     status_upscale: '应用 AI 增强 (2x)...',
                     status_recompiling: '重新编译增强型 4K 视频...',
                     success_enhanced: '成功！增强视频已准备就绪。',
-                    available_qualities: '可用质量:',
-                    status_selected_quality: '成功！自动选择: ', // NEW
+                    available_qualities: '可用质量:', // NEW
                 },
                 es: {
                     tagline: 'Descarga fácilmente tus videos generados por Sora',
@@ -798,20 +801,21 @@
                     info_duration: 'Duración:', 
                     info_prompt: 'Prompt:', 
                     no_prompt_info: 'Información de prompt no disponible', 
+                    // REMOVED: resolution_label, resolution_hint, res_best
                     status_retrieved: 'Video recuperado, analizando...',
                     status_watermark: 'Eliminando marca de agua, preparando archivo...',
+                    // NEW ENHANCE KEYS
                     enhance: 'Escalador Mejorado',
                     enhancing: 'Mejorando...',
                     status_upscale: 'Aplicando Mejora por IA (2x)...',
                     status_recompiling: 'Recompilando video 4K mejorado...',
                     success_enhanced: '¡Éxito! El video mejorado está listo.',
-                    available_qualities: 'Calidades disponibles:',
-                    status_selected_quality: '¡Éxito! Seleccionado automáticamente: ', // NEW
+                    available_qualities: 'Calidades disponibles:', // NEW
                 },
             };
 
             let currentLang = localStorage.getItem('sora_lang') || 'en';
-            let latestVideoData = null; // Store successful video data globally (duration, prompt, etc.)
+            let latestVideoData = null; // Store successful video data globally
             let currentQualityData = null; // Store the currently selected quality data (updated on selection)
 
             // Simulated available quality data (would come from a real API response)
@@ -820,8 +824,6 @@
                 { quality: '1080p', res: '1920x1080', size: '15.2MB', cleanUrl: 'simulated_video_1080p.mp4', filename: 'sora-video-1080p.mp4' },
                 { quality: '720p', res: '1280x720', size: '8.5MB', cleanUrl: 'simulated_video_720p.mp4', filename: 'sora-video-720p.mp4' },
             ];
-            
-            // SIMULATION NOTE: In a real app, the backend call would return this entire structure for the specific URL.
 
             function t(key) {
                 return i18n[currentLang]?.[key] || i18n.en[key] || key;
@@ -841,8 +843,7 @@
                     el.placeholder = t(key);
                 });
                 
-                // Re-update the static span inside the quality selector after language change
-                document.querySelector('#qualitySelector span[data-i18n="available_qualities"]').textContent = t('available_qualities');
+                // No longer need to update <option> text
 
                 const langSelect = document.getElementById('langSelect');
                 if (langSelect) langSelect.value = lang;
@@ -925,8 +926,7 @@
                 downloadLink.classList.remove('visible');
                 enhanceBtn.classList.remove('visible'); 
                 preview.classList.remove('visible');
-                // Clear quality buttons, restoring the static span
-                qualitySelector.innerHTML = `<span data-i18n="available_qualities" style="color: var(--text-secondary); flex-shrink: 0;">${t('available_qualities')}</span>`; 
+                qualitySelector.innerHTML = `<span data-i18n="available_qualities" style="color: var(--text-secondary);">${t('available_qualities')}</span>`; // Clear quality buttons
                 latestVideoData = null;
                 currentQualityData = null;
             });
@@ -1009,14 +1009,7 @@
             function populateQualitySelector() {
                 qualitySelector.innerHTML = `<span data-i18n="available_qualities" style="color: var(--text-secondary); margin-right: 8px; flex-shrink: 0;">${t('available_qualities')}</span>`;
                 
-                let defaultSelection = availableQualities[0]; // Default to Original/Highest
-
                 availableQualities.forEach(q => {
-                    // Check if the preferred quality (1080p) exists
-                    if (q.quality === '1080p') {
-                        defaultSelection = q; // Set 1080p as the preferred default
-                    }
-                    
                     const button = document.createElement('button');
                     button.className = 'quality-btn';
                     button.textContent = `${q.quality} (${q.res})`;
@@ -1025,10 +1018,8 @@
                     qualitySelector.appendChild(button);
                 });
                 
-                // Select the preferred/default quality
-                changeQuality(defaultSelection);
-
-                return defaultSelection;
+                // Select the highest quality by default
+                changeQuality(availableQualities[0]);
             }
 
 
@@ -1059,12 +1050,13 @@
                     await updateStatus('status_retrieved', 1000); // Wait 1 second
                     await updateStatus('status_watermark', 2000); // Wait 2 seconds
 
-                    // SIMULATED API CALL - Returns the general video info
+                    // SIMULATED API CALL (resolution is now selected AFTER this call)
+                    // The backend would return ALL available qualities or a manifest.
                     const data = {
                         ok: true,
                         duration: '4.5s',
                         prompt: 'A majestic griffin landing in a futuristic city at sunset, 8k, cinematic lighting.',
-                        // availableQualities: availableQualities, // A real API would return this
+                        // Note: actual file info will come from currentQualityData after selection
                     };
 
                     if (!data.ok) { 
@@ -1075,11 +1067,13 @@
                     
                     latestVideoData = data; // Store general video data
                     
-                    // NEW STEP: Populate Quality Selector and determine default based on 1080p preference
-                    const defaultQuality = populateQualitySelector(); 
+                    // NEW STEP: Populate Quality Selector
+                    populateQualitySelector(); // This also calls changeQuality for the default (Original)
+                    
+                    const defaultQuality = currentQualityData;
                     
                     // Success state based on default quality
-                    log.textContent = t('status_selected_quality') + `${defaultQuality.quality} [${defaultQuality.size}]`;
+                    log.textContent = `Success! Default quality selected: ${defaultQuality.quality} [${defaultQuality.size}]`;
                     log.className = 'status success';
                     
                     // FINAL UI setup based on default quality
@@ -1113,8 +1107,7 @@
 
                     // SIMULATED ENHANCED DATA (always 4K for the demo)
                     const enhancedData = {
-                        // The enhanced filename is based on the currently selected *base* quality
-                        filename: currentQualityData.filename.replace('.mp4', '-ENHANCED.mp4'),
+                        filename: currentQualityData.filename.replace(currentQualityData.quality.toLowerCase(), 'enhanced').replace('.mp4', '.mp4'),
                         size: '58.7MB', 
                         resolution: '3840x2160 (4K Enhanced)',
                         cleanUrl: 'simulated_video-enhanced.mp4', 
