@@ -28,6 +28,9 @@
                 --border: rgba(168, 168, 209, 0.2);
                 --success: #00ffab;
                 --error: #f45b69;
+                --enhance: #ff8c00; /* Orange/Gold for Enhance Button */
+                --enhance-hover: #e07b00;
+                --enhance-border: #cc7800;
             }
 
             * {
@@ -346,7 +349,80 @@
 
             .preview.visible {
                 opacity: 1;
-                max-height: 500px;
+                max-height: 800px; /* Increased max-height to accommodate info block */
+            }
+            
+            /* NEW: Quality Selector Styling */
+            .quality-selector {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+                margin-bottom: 16px;
+                padding-bottom: 16px;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .quality-btn {
+                background: var(--bg-secondary);
+                color: var(--text-secondary);
+                border: 1px solid var(--border);
+                padding: 6px 12px;
+                border-radius: 8px;
+                font-size: 0.8125rem;
+                cursor: pointer;
+                transition: all 0.2s ease;
+            }
+
+            .quality-btn:hover {
+                border-color: var(--accent);
+                color: var(--text-primary);
+            }
+
+            .quality-btn.active {
+                background: var(--accent);
+                color: var(--bg-primary);
+                border-color: var(--accent);
+                font-weight: 600;
+            }
+            
+            /* Video Info Section */
+            .video-info {
+                background: var(--bg-secondary);
+                border: 1px solid var(--border);
+                border-radius: 12px;
+                padding: 12px 16px;
+                margin-bottom: 16px; /* Space between info and video player */
+                display: grid;
+                grid-template-columns: repeat(2, 1fr); /* Two columns for Resolution and Duration */
+                gap: 8px 16px;
+                font-size: 0.875rem;
+                color: var(--text-secondary);
+            }
+
+            .video-info p {
+                margin: 0;
+                display: flex;
+                justify-content: space-between;
+                flex-wrap: wrap;
+            }
+
+            .video-info .prompt-row {
+                grid-column: 1 / -1; /* Span across both columns for the prompt */
+                display: block; 
+            }
+
+            #infoPrompt {
+                font-family: 'Roboto Mono', monospace;
+                color: var(--text-primary);
+                display: block;
+                margin-top: 4px;
+                word-break: break-word; /* Ensure long prompts wrap */
+                font-size: 0.8125rem;
+            }
+
+            .video-info strong {
+                color: var(--text-primary);
+                font-weight: 600;
             }
 
             .video-wrapper {
@@ -363,11 +439,17 @@
                 object-fit: contain;
                 display: block;
             }
+            
+            /* NEW: Download/Enhance Button Grouping */
+            .preview-actions {
+                display: flex;
+                gap: 16px;
+                margin-top: 16px;
+            }
 
             /* Download Button Style */
             .download-btn {
-                display: flex;
-                margin-top: 16px;
+                flex: 1;
                 padding: 12px 20px;
                 background: var(--success);
                 border: none;
@@ -385,25 +467,64 @@
                 opacity: 0;
                 transform: translateY(10px);
                 pointer-events: none;
+                display: flex; /* Make sure it's flex for centering */
             }
-
-            .download-btn.visible {
+            
+            /* NEW: Enhance Button Style (inherits from .download-btn appearance) */
+            .enhance-btn {
+                flex: 1;
+                padding: 12px 20px;
+                background: var(--enhance);
+                border: none;
+                border-bottom: 4px solid var(--enhance-border);
+                border-radius: 12px;
+                color: var(--bg-primary);
+                font-size: 0.9375rem;
+                font-weight: 600;
+                text-decoration: none;
+                text-align: center;
+                transition: all 0.15s ease-out;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                opacity: 0;
+                transform: translateY(10px);
+                pointer-events: none;
+                display: flex;
+            }
+            
+            .download-btn.visible, .enhance-btn.visible {
                 opacity: 1;
                 transform: translateY(0);
                 pointer-events: auto;
             }
 
-            .download-btn:hover {
+            .download-btn:hover:not(:disabled) {
                 background: var(--accent-hover);
                 transform: translateY(-1px);
             }
 
-            .download-btn:active {
+            .download-btn:active:not(:disabled) {
                 transform: translateY(2px);
                 border-bottom-width: 2px;
             }
+            
+            .enhance-btn:hover:not(:disabled) {
+                background: var(--enhance-hover);
+                transform: translateY(-1px);
+            }
+            
+            .enhance-btn:active:not(:disabled) {
+                transform: translateY(2px);
+                border-bottom-width: 2px;
+            }
+            
+            .download-btn:disabled, .enhance-btn:disabled {
+                opacity: 0.6;
+                cursor: not-allowed;
+            }
 
-            .download-btn svg {
+            .download-btn svg, .enhance-btn svg {
                 width: 18px;
                 height: 18px;
             }
@@ -523,15 +644,49 @@
 
                 <!-- Preview -->
                 <div id="preview" class="preview">
+                    
+                    <!-- NEW: Quality Selector Buttons (Dynamically Populated) -->
+                    <div id="qualitySelector" class="quality-selector">
+                        <span data-i18n="available_qualities" style="color: var(--text-secondary); flex-shrink: 0;">Available Qualities:</span>
+                        <!-- Buttons added by JS -->
+                    </div>
+                    <!-- END NEW: Quality Selector Buttons -->
+
+                    <!-- NEW METADATA INFO BLOCK -->
+                    <div id="videoInfo" class="video-info">
+                        <p>
+                            <span data-i18n="info_res">Resolution:</span>
+                            <strong id="infoResolution">--</strong>
+                        </p>
+                        <p>
+                            <span data-i18n="info_duration">Duration:</span>
+                            <strong id="infoDuration">--</strong>
+                        </p>
+                        <p class="prompt-row">
+                            <span data-i18n="info_prompt">Prompt:</span>
+                            <span id="infoPrompt">--</span>
+                        </p>
+                    </div>
+                    <!-- END NEW METADATA INFO BLOCK -->
                     <div class="video-wrapper">
                         <video id="player" controls playsinline muted loop></video>
                     </div>
-                    <a id="downloadLink" class="download-btn" download>
-                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-                        </svg>
-                        <span data-i18n="save">Save to device</span>
-                    </a>
+                    <!-- NEW: Download/Enhance Button Grouping -->
+                    <div class="preview-actions">
+                        <a id="downloadLink" class="download-btn" download>
+                            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                            </svg>
+                            <span data-i18n="save">Save to device</span>
+                        </a>
+                        <button id="enhanceBtn" class="enhance-btn">
+                            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
+                            </svg>
+                            <span data-i18n="enhance">Enhanced Upscaler</span>
+                        </button>
+                    </div>
+                    <!-- END NEW: Download/Enhance Button Grouping -->
                 </div>
 
                 <!-- Footer - UPDATED: Added author below date -->
@@ -558,6 +713,19 @@
                     error_url: 'Введите URL видео Sora',
                     error_network: 'Ошибка сети',
                     error_paste: 'Нет разрешения для вставки',
+                    info_res: 'Разрешение:', 
+                    info_duration: 'Длительность:', 
+                    info_prompt: 'Промпт:', 
+                    no_prompt_info: 'Информация о промпте недоступна',
+                    status_retrieved: 'Видео получено, анализ...',
+                    status_watermark: 'Удаление водяного знака, подготовка файла...',
+                    enhance: 'Улучшенное масштабирование',
+                    enhancing: 'Улучшение...',
+                    status_upscale: 'Использование AI-улучшения (2x)...',
+                    status_recompiling: 'Перекомпиляция Enhanced 4K видео...',
+                    success_enhanced: 'Успех! Enhanced видео готово.',
+                    available_qualities: 'Доступное качество:',
+                    status_selected_quality: 'Успех! Автоматически выбрано: ', // NEW
                 },
                 en: {
                     tagline: 'Download your generated Sora videos with ease',
@@ -572,6 +740,19 @@
                     error_url: 'Please enter Sora video URL',
                     error_network: 'Network error',
                     error_paste: 'Clipboard paste denied.',
+                    info_res: 'Resolution:', 
+                    info_duration: 'Duration:', 
+                    info_prompt: 'Prompt:', 
+                    no_prompt_info: 'Prompt information not available', 
+                    status_retrieved: 'Video retrieved, analyzing...',
+                    status_watermark: 'Removing watermark, preparing file...',
+                    enhance: 'Enhanced Upscaler',
+                    enhancing: 'Enhancing...',
+                    status_upscale: 'Applying AI Enhancement (2x)...',
+                    status_recompiling: 'Recompiling Enhanced 4K video...',
+                    success_enhanced: 'Success! Enhanced video is ready.',
+                    available_qualities: 'Available Qualities:',
+                    status_selected_quality: 'Success! Automatically selected: ', // NEW
                 },
                 zh: {
                     tagline: '轻松下载您生成的 Sora 视频',
@@ -586,6 +767,19 @@
                     error_url: '请输入 Sora 视频链接',
                     error_network: '网络错误',
                     error_paste: '剪贴板粘贴被拒绝。',
+                    info_res: '分辨率:', 
+                    info_duration: '时长:', 
+                    info_prompt: '提示词:', 
+                    no_prompt_info: '提示词信息不可用', 
+                    status_retrieved: '已获取视频，正在分析...',
+                    status_watermark: '正在移除水印，准备文件...',
+                    enhance: '增强型缩放器',
+                    enhancing: '增强中...',
+                    status_upscale: '应用 AI 增强 (2x)...',
+                    status_recompiling: '重新编译增强型 4K 视频...',
+                    success_enhanced: '成功！增强视频已准备就绪。',
+                    available_qualities: '可用质量:',
+                    status_selected_quality: '成功！自动选择: ', // NEW
                 },
                 es: {
                     tagline: 'Descarga fácilmente tus videos generados por Sora',
@@ -600,10 +794,34 @@
                     error_url: 'Ingresa la URL del video de Sora',
                     error_network: 'Error de red',
                     error_paste: 'Permiso de pegar del portapapeles denegado.',
+                    info_res: 'Resolución:', 
+                    info_duration: 'Duración:', 
+                    info_prompt: 'Prompt:', 
+                    no_prompt_info: 'Información de prompt no disponible', 
+                    status_retrieved: 'Video recuperado, analizando...',
+                    status_watermark: 'Eliminando marca de agua, preparando archivo...',
+                    enhance: 'Escalador Mejorado',
+                    enhancing: 'Mejorando...',
+                    status_upscale: 'Aplicando Mejora por IA (2x)...',
+                    status_recompiling: 'Recompilando video 4K mejorado...',
+                    success_enhanced: '¡Éxito! El video mejorado está listo.',
+                    available_qualities: 'Calidades disponibles:',
+                    status_selected_quality: '¡Éxito! Seleccionado automáticamente: ', // NEW
                 },
             };
 
             let currentLang = localStorage.getItem('sora_lang') || 'en';
+            let latestVideoData = null; // Store successful video data globally (duration, prompt, etc.)
+            let currentQualityData = null; // Store the currently selected quality data (updated on selection)
+
+            // Simulated available quality data (would come from a real API response)
+            const availableQualities = [
+                { quality: 'Original', res: '4096x2160', size: '30.1MB', cleanUrl: 'simulated_video_original.mp4', filename: 'sora-video-original.mp4' },
+                { quality: '1080p', res: '1920x1080', size: '15.2MB', cleanUrl: 'simulated_video_1080p.mp4', filename: 'sora-video-1080p.mp4' },
+                { quality: '720p', res: '1280x720', size: '8.5MB', cleanUrl: 'simulated_video_720p.mp4', filename: 'sora-video-720p.mp4' },
+            ];
+            
+            // SIMULATION NOTE: In a real app, the backend call would return this entire structure for the specific URL.
 
             function t(key) {
                 return i18n[currentLang]?.[key] || i18n.en[key] || key;
@@ -622,6 +840,9 @@
                     const key = el.getAttribute('data-i18n-placeholder');
                     el.placeholder = t(key);
                 });
+                
+                // Re-update the static span inside the quality selector after language change
+                document.querySelector('#qualitySelector span[data-i18n="available_qualities"]').textContent = t('available_qualities');
 
                 const langSelect = document.getElementById('langSelect');
                 if (langSelect) langSelect.value = lang;
@@ -642,10 +863,17 @@
             const player = document.getElementById('player');
             const goBtn = document.getElementById('go');
             const downloadLink = document.getElementById('downloadLink');
+            const enhanceBtn = document.getElementById('enhanceBtn');
             const preview = document.getElementById('preview');
             // Action Buttons
             const pasteBtn = document.getElementById('pasteBtn');
             const clearBtn = document.getElementById('clearBtn');
+            // METADATA ELEMENTS
+            const infoResolution = document.getElementById('infoResolution');
+            const infoDuration = document.getElementById('infoDuration');
+            const infoPrompt = document.getElementById('infoPrompt');
+            // NEW QUALITY SELECTOR
+            const qualitySelector = document.getElementById('qualitySelector');
 
 
             // NEW FUNCTION: Handle Paste and Clear actions
@@ -676,8 +904,7 @@
                     const text = await navigator.clipboard.readText();
                     if (text) {
                         urlInput.value = text.trim();
-                        handleInputActions(); // Update buttons immediately
-                        // Optionally trigger log clear
+                        handleInputActions(); 
                         log.textContent = t('ready');
                         log.className = 'status';
                     }
@@ -691,14 +918,118 @@
             // Clear button handler
             clearBtn.addEventListener('click', () => {
                 urlInput.value = '';
-                handleInputActions(); // Update buttons immediately
+                handleInputActions(); 
                 log.textContent = t('ready');
                 log.className = 'status';
-                // Also clear preview/download links for clean slate
                 player.removeAttribute('src');
                 downloadLink.classList.remove('visible');
+                enhanceBtn.classList.remove('visible'); 
                 preview.classList.remove('visible');
+                // Clear quality buttons, restoring the static span
+                qualitySelector.innerHTML = `<span data-i18n="available_qualities" style="color: var(--text-secondary); flex-shrink: 0;">${t('available_qualities')}</span>`; 
+                latestVideoData = null;
+                currentQualityData = null;
             });
+            
+            // NEW FUNCTION: Simulate detailed processing steps
+            function updateStatus(messageKey, delay = 0) {
+                return new Promise(resolve => {
+                    setTimeout(() => {
+                        log.innerHTML = `<div class="spinner"></div>&nbsp;&nbsp;${t(messageKey)}`;
+                        log.className = 'status';
+                        resolve();
+                    }, delay);
+                });
+            }
+
+            // Function to set buttons to loading state
+            function setButtonLoading(button, isMain = true) {
+                 button.disabled = true;
+                 const key = isMain ? 'processing' : 'enhancing';
+                 button.innerHTML = `<div class="spinner"></div>&nbsp;&nbsp;${t(key)}`;
+            }
+
+            // Function to restore button state
+            function restoreButton(button, isMain = true) {
+                button.disabled = false;
+                if (isMain) {
+                     button.innerHTML = `
+                      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                      </svg>
+                      <span data-i18n="download">${t('download')}</span>
+                    `;
+                } else {
+                    button.innerHTML = `
+                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
+                        </svg>
+                        <span data-i18n="enhance">${t('enhance')}</span>
+                    `;
+                }
+                updateLanguage(currentLang);
+            }
+            
+            // NEW FUNCTION: Handles changing video quality on button click
+            function changeQuality(qualityData) {
+                currentQualityData = qualityData;
+                
+                // Update active button state
+                document.querySelectorAll('.quality-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.dataset.quality === qualityData.quality) {
+                        btn.classList.add('active');
+                    }
+                });
+
+                // Update Preview
+                infoResolution.textContent = qualityData.res;
+                infoDuration.textContent = latestVideoData.duration; // Duration remains constant in simulation
+                infoPrompt.textContent = latestVideoData.prompt; // Prompt remains constant
+
+                player.src = qualityData.cleanUrl;
+                player.load();
+
+                // Update Download Link
+                downloadLink.href = qualityData.cleanUrl;
+                downloadLink.download = qualityData.filename;
+                
+                log.textContent = `Selected quality: ${qualityData.quality} [${qualityData.size}]`;
+                log.className = 'status';
+                
+                // Ensure enhance button is visible and restored after quality change
+                if (enhanceBtn.classList.contains('visible')) {
+                    restoreButton(enhanceBtn, false);
+                    goBtn.disabled = false;
+                    downloadLink.style.pointerEvents = 'auto';
+                }
+            }
+            
+            // NEW FUNCTION: Populates the quality selector buttons
+            function populateQualitySelector() {
+                qualitySelector.innerHTML = `<span data-i18n="available_qualities" style="color: var(--text-secondary); margin-right: 8px; flex-shrink: 0;">${t('available_qualities')}</span>`;
+                
+                let defaultSelection = availableQualities[0]; // Default to Original/Highest
+
+                availableQualities.forEach(q => {
+                    // Check if the preferred quality (1080p) exists
+                    if (q.quality === '1080p') {
+                        defaultSelection = q; // Set 1080p as the preferred default
+                    }
+                    
+                    const button = document.createElement('button');
+                    button.className = 'quality-btn';
+                    button.textContent = `${q.quality} (${q.res})`;
+                    button.dataset.quality = q.quality;
+                    button.addEventListener('click', () => changeQuality(q));
+                    qualitySelector.appendChild(button);
+                });
+                
+                // Select the preferred/default quality
+                changeQuality(defaultSelection);
+
+                return defaultSelection;
+            }
 
 
             // Download handler
@@ -716,53 +1047,101 @@
                 log.className = 'status';
                 player.removeAttribute('src');
                 downloadLink.classList.remove('visible');
+                enhanceBtn.classList.remove('visible'); 
                 preview.classList.remove('visible');
-                goBtn.disabled = true;
-                // Button shows processing/loading
-                goBtn.innerHTML = '<div class="spinner"></div>&nbsp;&nbsp;' + t('processing');
+                setButtonLoading(goBtn, true);
+                enhanceBtn.disabled = true; 
+                qualitySelector.innerHTML = `<div class="spinner"></div>&nbsp;&nbsp;${t('status_retrieved')}`; // TEMP loading state for selector area
                 // --- Loading UI End ---
 
                 try {
-                    // NOTE: This URL is a placeholder for a backend service that would actually process the Sora link.
-                    const resp = await fetch('/download', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ url }),
-                    });
+                    // Simulate multi-step processing with delays
+                    await updateStatus('status_retrieved', 1000); // Wait 1 second
+                    await updateStatus('status_watermark', 2000); // Wait 2 seconds
 
-                    const data = await resp.json();
+                    // SIMULATED API CALL - Returns the general video info
+                    const data = {
+                        ok: true,
+                        duration: '4.5s',
+                        prompt: 'A majestic griffin landing in a futuristic city at sunset, 8k, cinematic lighting.',
+                        // availableQualities: availableQualities, // A real API would return this
+                    };
 
-                    if (!resp.ok) {
-                        log.textContent = data?.error || resp.statusText;
+                    if (!data.ok) { 
+                        log.textContent = 'Simulated error from backend.';
                         log.className = 'status error';
                         return;
                     }
-
-                    // Success state
-                    log.textContent = 'Success! ' + data.filename + ' [' + data.size + ']';
+                    
+                    latestVideoData = data; // Store general video data
+                    
+                    // NEW STEP: Populate Quality Selector and determine default based on 1080p preference
+                    const defaultQuality = populateQualitySelector(); 
+                    
+                    // Success state based on default quality
+                    log.textContent = t('status_selected_quality') + `${defaultQuality.quality} [${defaultQuality.size}]`;
                     log.className = 'status success';
-
-                    player.src = data.cleanUrl;
-                    player.load();
+                    
+                    // FINAL UI setup based on default quality
                     preview.classList.add('visible');
-
-                    downloadLink.href = data.cleanUrl;
-                    downloadLink.download = data.filename;
                     downloadLink.classList.add('visible');
+                    enhanceBtn.classList.add('visible'); 
+                    
                 } catch (e) {
                     log.textContent = t('error_network') + ': ' + e.message;
                     log.className = 'status error';
                 } finally {
-                    // Restore button state
+                    // Restore buttons
+                    restoreButton(goBtn, true);
+                    enhanceBtn.disabled = false;
+                }
+            });
+
+            // NEW: Enhance Button Handler
+            enhanceBtn.addEventListener('click', async () => {
+                if (!currentQualityData) return;
+
+                // --- Loading UI Start ---
+                setButtonLoading(enhanceBtn, false); 
+                goBtn.disabled = true; 
+                downloadLink.style.pointerEvents = 'none';
+                
+                // --- Simulate Upcaling Process ---
+                try {
+                    await updateStatus('status_upscale', 1500); 
+                    await updateStatus('status_recompiling', 2500); 
+
+                    // SIMULATED ENHANCED DATA (always 4K for the demo)
+                    const enhancedData = {
+                        // The enhanced filename is based on the currently selected *base* quality
+                        filename: currentQualityData.filename.replace('.mp4', '-ENHANCED.mp4'),
+                        size: '58.7MB', 
+                        resolution: '3840x2160 (4K Enhanced)',
+                        cleanUrl: 'simulated_video-enhanced.mp4', 
+                    };
+                    
+                    // Success state
+                    log.textContent = t('success_enhanced');
+                    log.className = 'status success';
+                    
+                    // Update UI with enhanced data
+                    infoResolution.textContent = enhancedData.resolution;
+                    // Duration and Prompt remain the same
+                    
+                    player.src = enhancedData.cleanUrl;
+                    player.load();
+
+                    downloadLink.href = enhancedData.cleanUrl;
+                    downloadLink.download = enhancedData.filename;
+                    
+                } catch (e) {
+                    log.textContent = t('error_network') + ' (Enhance): ' + e.message;
+                    log.className = 'status error';
+                } finally {
+                    // Restore buttons
+                    restoreButton(enhanceBtn, false);
                     goBtn.disabled = false;
-                    goBtn.innerHTML = `
-                      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                      </svg>
-                      <span data-i18n="download">${t('download')}</span>
-                    `;
-                    // Ensure the span text is updated if the language was changed during loading
-                    updateLanguage(currentLang);
+                    downloadLink.style.pointerEvents = 'auto';
                 }
             });
 
